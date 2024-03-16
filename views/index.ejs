@@ -1,1 +1,15 @@
-<h1>Home</h1>
+  <section class="articles">
+    <h2 class="articles__heading">Latest Posts</h2>
+  
+    <ul class="article-ul">
+      <% data.forEach(vehicle => { %>
+        <li>
+          <a href="/post/<%= vehicle._id %>">
+            <span><%= vehicle.title %></span>
+            <span class="article-list__date"><%= vehicle.type %></span>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  
+  </section>

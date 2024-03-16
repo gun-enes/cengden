@@ -241,10 +241,10 @@ img {
 .article-ul li:hover {
   filter: none;
 }
-
+/*
 .article-ul:hover li {
   filter: blur(3px);
-}
+}*/
 
 .article-ul:hover li:hover {
   filter: none;
