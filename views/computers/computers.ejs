@@ -1,0 +1,25 @@
+<section class="articles">
+    <div class="grid-container">
+      <% data.forEach(computer => { %>
+      <div class="grid-item">
+        <img src="<%= computer.image %>">
+        <a href="/computerinfo/<%= computer._id %>">
+          <span><%= computer.title %></span>
+        </a>
+        <span class="article-list__date"></span>
+        <div class="info-row">
+          <span class="explanation">Type:</span>
+          <span class="info"><%= computer.type %></span>
+        </div>
+        <div class="info-row">
+          <span class="explanation">Brand:</span>
+          <span class="info"><%= computer.brand %></span>
+        </div>
+        <div class="info-row">
+          <span class="explanation">Model:</span>
+          <span class="info"><%= computer.model %></span>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </section>

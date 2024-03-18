@@ -1,25 +1,23 @@
-  <section class="articles">
-    <h2 class="articles__heading">Latest Posts</h2>
-  
+<section class="articles">
     <div class="grid-container">
-      <% combinedData.forEach(vehicle => { %>
+      <% data.forEach(phone => { %>
       <div class="grid-item">
-        <img src="<%= vehicle.image %>">
-        <a href="/vehicleinfo/<%= vehicle._id %>">
-          <span><%= vehicle.title %></span>
+        <img src="<%= phone.image %>">
+        <a href="/phoneinfo/<%= phone._id %>">
+          <span><%= phone.title %></span>
         </a>
         <span class="article-list__date"></span>
         <div class="info-row">
           <span class="explanation">Type:</span>
-          <span class="info"><%= vehicle.type %></span>
+          <span class="info"><%= phone.type %></span>
         </div>
         <div class="info-row">
           <span class="explanation">Brand:</span>
-          <span class="info"><%= vehicle.brand %></span>
+          <span class="info"><%= phone.brand %></span>
         </div>
         <div class="info-row">
           <span class="explanation">Model:</span>
-          <span class="info"><%= vehicle.model %></span>
+          <span class="info"><%= phone.model %></span>
         </div>
       </div>
       <% }) %>

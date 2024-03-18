@@ -17,33 +17,42 @@ const VehicleSchema = new Schema({
         type: String,
         required: true
     },
-    /*year: {
-
+    image: {
+        type: String,
+        required: true
+    },
+    year: {
+        type: String,
+        required: true
     },
     color: {
-
+        type: String,
+        required: true
     },
     engine_displacement: {
-
+        type: String,
+        required: true
     },
     fuel_type: {
-
+        type: String,
+        required: true
     },
     transmission_type: {
-
+        type: String,
+        required: true
     },
     mileage: {
-
+        type: String,
+        required: true
     },
     price: {
-
-    },
-    image: {
-
+        type: String,
+        required: true
     },
     description: {
-
-    },*/
+        type: String,
+        required: true
+    },
 })
 
 module.exports = mongoose.model('vehicle', VehicleSchema);

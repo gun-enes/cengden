@@ -1,8 +1,6 @@
-  <section class="articles">
-    <h2 class="articles__heading">Latest Posts</h2>
-  
+<section class="articles">
     <div class="grid-container">
-      <% combinedData.forEach(vehicle => { %>
+      <% data.forEach(vehicle => { %>
       <div class="grid-item">
         <img src="<%= vehicle.image %>">
         <a href="/vehicleinfo/<%= vehicle._id %>">

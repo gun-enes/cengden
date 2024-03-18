@@ -1,11 +1,10 @@
-  <section class="articles">
-    <h2 class="articles__heading">Latest Posts</h2>
-  
+<div class="author">
+    <h1 class="author__heading">Search Results</h1>
+  </div>
     <div class="grid-container">
-      <% combinedData.forEach(vehicle => { %>
+      <% data.forEach(vehicle => { %>
       <div class="grid-item">
-        <img src="<%= vehicle.image %>">
-        <a href="/vehicleinfo/<%= vehicle._id %>">
+        <a href="/post/<%= vehicle._id %>">
           <span><%= vehicle.title %></span>
         </a>
         <span class="article-list__date"></span>
@@ -27,4 +26,3 @@
     
   
   </section>
-  
