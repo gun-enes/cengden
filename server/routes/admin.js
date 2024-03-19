@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const vehicle = require('../models/vehicle')
+const phone = require('../models/phones')
+const lesson = require('../models/lessons')
+const computer = require('../models/computers')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -34,25 +37,41 @@ const authMiddleware = (req, res, next ) => {
  * GET /
  * Admin - Login Page
 */
-router.get('/admin', async (req, res) => {
+router.get('/login', async (req, res) => {
   try {
     const locals = {
-      title: "Admin",
+      title: "Login Page",
       description: "Simple Blog created with NodeJs, Express & MongoDb."
     }
 
-    res.render('admin/index', { locals, layout: adminLayout });
+    res.render('admin/login', { locals, layout: adminLayout });
   } catch (error) {
     console.log(error);
   }
 });
 
+/**
+ * GET /
+ * Admin - Register Page
+*/
+router.get('/register', async (req, res) => {
+  try {
+    const locals = {
+      title: "Login Page",
+      description: "Simple Blog created with NodeJs, Express & MongoDb."
+    }
+
+    res.render('admin/register', { locals, layout: adminLayout });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 /**
  * POST /
  * Admin - Check Login
 */
-router.post('/admin', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     
@@ -71,6 +90,31 @@ router.post('/admin', async (req, res) => {
     const token = jwt.sign({ userId: user._id}, jwtSecret );
     res.cookie('token', token, { httpOnly: true });
     res.redirect('/dashboard');
+
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/**
+ * POST /
+ * Admin - Register
+*/
+router.post('/register', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    try {
+      const user = await User.create({ username, password:hashedPassword });
+      res.redirect("/dashboard");
+    } 
+    catch (error) {
+      if(error.code === 11000) {
+        res.status(409).json({ message: 'User already in use'});
+      }
+      res.status(500).json({ message: 'Internal server error'})
+    }
 
   } catch (error) {
     console.log(error);
@@ -106,53 +150,15 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
 
 
 
-// router.post('/admin', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
-    
-//     if(req.body.username === 'admin' && req.body.password === 'password') {
-//       res.send('You are logged in.')
-//     } else {
-//       res.send('Wrong username or password');
-//     }
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 
-/**
- * POST /
- * Admin - Register
-*/
-router.post('/register', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    try {
-      const user = await User.create({ username, password:hashedPassword });
-      res.sendStatus(201); 
-    } 
-    catch (error) {
-      if(error.code === 11000) {
-        res.status(409).json({ message: 'User already in use'});
-      }
-      res.status(500).json({ message: 'Internal server error'})
-    }
-
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 
 /**
  * DELETE /
  * Admin - Delete Post
 */
-router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
+router.delete('/delete-vehicle/:id', authMiddleware, async (req, res) => {
 
   try {
     await vehicle.deleteOne( { _id: req.params.id } );
@@ -216,7 +222,7 @@ router.get('/add-vehicle', authMiddleware, async (req, res) => {
 
 });
 
-//vehicle eklemeye gider
+//phone eklemeye gider
 router.get('/add-phone', authMiddleware, async (req, res) => {
   try {
     const locals = {
@@ -236,7 +242,7 @@ router.get('/add-phone', authMiddleware, async (req, res) => {
 
 });
 
-//vehicle eklemeye gider
+//computer eklemeye gider
 router.get('/add-computer', authMiddleware, async (req, res) => {
   try {
     const locals = {
@@ -256,7 +262,7 @@ router.get('/add-computer', authMiddleware, async (req, res) => {
 
 });
 
-//vehicle eklemeye gider
+//lesson eklemeye gider
 router.get('/add-lesson', authMiddleware, async (req, res) => {
   try {
     const locals = {
@@ -278,7 +284,7 @@ router.get('/add-lesson', authMiddleware, async (req, res) => {
 
 
  // Admin - Create New Post
-// post ekler
+// vehicle ekler
 router.post('/add-vehicle', authMiddleware, async (req, res) => {
   try {
     try {
@@ -288,6 +294,14 @@ router.post('/add-vehicle', authMiddleware, async (req, res) => {
         type: req.body.type,
         brand: req.body.brand,
         image: req.body.image,
+        year: req.body.year,
+        color: req.body.color,
+        engine_displacement: req.body.engine_displacement,
+        fuel_type: req.body.fuel_type,
+        transmission_type: req.body.transmission_type,
+        mileage: req.body.mileage,
+        price: req.body.price,
+        description: req.body.description,
       });
 
       await vehicle.create(newPost);
@@ -300,49 +314,89 @@ router.post('/add-vehicle', authMiddleware, async (req, res) => {
     console.log(error);
   }
 });
-/*
-
-//Admin - Create New Post
-
-router.get('/edit-post/:id', authMiddleware, async (req, res) => {
+// phone ekler
+router.post('/add-phone', authMiddleware, async (req, res) => {
   try {
+    try {
+      const newPost = new phone({
+        title: req.body.title,
+        model: req.body.model,
+        type: req.body.type,
+        brand: req.body.brand,
+        image: req.body.image,
+        year: req.body.year,
+        cpu: req.body.cpu,
+        ram: req.body.ram,
+        storage: req.body.storage,
+        camera: req.body.camera,
+        os: req.body.os,
+        price: req.body.price,
+        description: req.body.description,
+      });
 
-    const locals = {
-      title: "Edit Post",
-      description: "Free NodeJs User Management System",
-    };
-
-    const data = await Post.findOne({ _id: req.params.id });
-
-    res.render('admin/edit-post', {
-      locals,
-      data,
-      layout: adminLayout
-    })
+      await phone.create(newPost);
+      res.redirect('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
 
   } catch (error) {
     console.log(error);
   }
-
 });
-
-
-
- //Admin - Create New Post
-router.put('/edit-post/:id', authMiddleware, async (req, res) => {
+// computer ekler
+router.post('/add-computer', authMiddleware, async (req, res) => {
   try {
+    try {
+      const newPost = new computer({
+        title: req.body.title,
+        model: req.body.model,
+        type: req.body.type,
+        brand: req.body.brand,
+        image: req.body.image,
+        year: req.body.year,
+        cpu: req.body.cpu,
+        ram: req.body.ram,
+        storage: req.body.storage,
+        gpu: req.body.gpu,
+        os: req.body.os,
+        price: req.body.price,
+        description: req.body.description,
+      });
 
-    await Post.findByIdAndUpdate(req.params.id, {
-      title: req.body.title,
-      body: req.body.body,
-      updatedAt: Date.now()
-    });
-
-    res.redirect(`/edit-post/${req.params.id}`);
+      await computer.create(newPost);
+      res.redirect('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
 
   } catch (error) {
     console.log(error);
   }
+});
+// lesson ekler
+router.post('/add-lesson', authMiddleware, async (req, res) => {
+  try {
+    try {
+      const newPost = new lesson({
+        title: req.body.title,
+        tutor: req.body.tutor,
+        lesson: req.body.lesson,
+        location: req.body.location,
+        duration: req.body.duration,
+        price: req.body.price,
+        description: req.body.description,
+        image: req.body.image,
+      });
 
-});*/
+      await lesson.create(newPost);
+      res.redirect('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = router;

@@ -13,7 +13,7 @@ const PORT = 5000 || process.env.PORT;
  
 connectDB();
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cookieParser());
 

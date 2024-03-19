@@ -24,24 +24,6 @@ router.get('', async (req,res) => {
 		console.log(err);
 	}
 });
-/*
-function insertVehicle(){
-	vehicle.insertMany([
-		{
-			title: "Simoştan bir öpücüğe bir araba",
-			type: "Hatchback",
-			brand: "Mitsubishi",
-			model: "SpaceStar"
-		},
-		{
-			title: "Enesten araba",
-			type: "SUV",
-			brand: "Nissan",
-			model: "Qashqai"
-		}
-	])
-}
-insertVehicle();*/
 
 
 router.get('/vehicles', async (req,res) => {
@@ -120,7 +102,7 @@ router.get('/phoneinfo/:id', async (req,res) => {
 		};
 		let slug = req.params.id;
 		const data = await phone.findById({_id: slug});
-		res.render('phoneinfo', {locals, data});
+		res.render('phones/phoneinfo', {locals, data});
 	}catch(err){
 		console.log(err);
 	}
@@ -135,7 +117,7 @@ router.get('/computerinfo/:id', async (req,res) => {
 		};
 		let slug = req.params.id;
 		const data = await computer.findById({_id: slug});
-		res.render('computerinfo', {locals, data});
+		res.render('computers/computerinfo', {locals, data});
 	}catch(err){
 		console.log(err);
 	}
@@ -150,7 +132,7 @@ router.get('/lessoninfo/:id', async (req,res) => {
 		};
 		let slug = req.params.id;
 		const data = await lesson.findById({_id: slug});
-		res.render('lessoninfo', {locals, data});
+		res.render('lessons/lessoninfo', {locals, data});
 	}catch(err){
 		console.log(err);
 	}
