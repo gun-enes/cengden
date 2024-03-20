@@ -202,10 +202,10 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
     }
     const username = req.session.userName
     console.log(username)
-		const phonesData = await phone.find();
+		const phonesData = await phone.find({ user: req.session.userName });
     const vehiclesData = await vehicle.find({ user: req.session.userName });
-		const lessonsData = await lesson.find();
-		const computersData = await computer.find();
+		const lessonsData = await lesson.find({ user: req.session.userName });
+		const computersData = await computer.find({ user: req.session.userName });
 		const data = phonesData.concat(vehiclesData, lessonsData, computersData);    
 
     res.render('admin/dashboard', {
@@ -232,7 +232,7 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
  * DELETE /
  * Admin - Delete Post
 */
-router.delete('/delete-vehicle/:id', authMiddleware, async (req, res) => {
+router.delete('/delete-vehicle/:id', async (req, res) => {
 
   try {
     await vehicle.deleteOne( { _id: req.params.id } );
@@ -243,6 +243,36 @@ router.delete('/delete-vehicle/:id', authMiddleware, async (req, res) => {
 
 });
 
+router.delete('/delete-phone/:id', authMiddleware, async (req, res) => {
+
+  try {
+    await phone.deleteOne( { _id: req.params.id } );
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.delete('/delete-computer/:id', authMiddleware, async (req, res) => {
+
+  try {
+    await computer.deleteOne( { _id: req.params.id } );
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.delete('/delete-lesson/:id', authMiddleware, async (req, res) => {
+
+  try {
+    await lesson.deleteOne( { _id: req.params.id } );
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.log(error);
+  }
+
+});
 
 /**
  * GET /

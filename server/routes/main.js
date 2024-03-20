@@ -77,6 +77,19 @@ router.get('/lessons', async (req,res) => {
 		console.log(err);
 	}
 });
+
+router.post('/vehicleinfo/:id', async (req, res) => {
+	try {
+        const vehicleId = req.params.id;
+        const { isFavorite } = req.body; // Expecting a boolean value
+        const updatedVehicle = await vehicle.findByIdAndUpdate(vehicleId, { $set: { favorite: isFavorite } }, { new: true });
+
+        res.json({ status: 'success', message: 'Favorite status updated', data: updatedVehicle });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: 'error', message: 'Failed to update favorite status' });
+    }
+});
 //route for vehicleinfo
 router.get('/vehicleinfo/:id', async (req,res) => {
 	try{
@@ -86,7 +99,8 @@ router.get('/vehicleinfo/:id', async (req,res) => {
 		};
 		let slug = req.params.id;
 		const data = await vehicle.findById({_id: slug});
-		res.render('vehicles/vehicleinfo', {locals, data});
+		const fav = data.favorite ? "Like" : "Liked"
+		res.render('vehicles/vehicleinfo', {locals, data, fav});
 	}catch(err){
 		console.log(err);
 	}

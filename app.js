@@ -4,6 +4,7 @@ const express = require('express');
 const expressLayout = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 
@@ -17,6 +18,7 @@ connectDB();
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cookieParser());
+app.use(methodOverride('_method'));
 
 //app.use(passport.initialize());
 //app.use(passport.session());
