@@ -44,4 +44,23 @@
         <span class="explanation">Price:</span>
         <span class="info"><%= data.price %></span>
     </div>
+    <button id="likeButton" class="like-button">Like</button>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const isLiked = this.classList.toggle('liked');
+                    this.textContent = isLiked ? 'Liked' : 'Like';
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.liked').forEach(button => {
+                button.addEventListener('click', function() {
+                    const isLiked = this.classList.toggle('liked');
+                    this.textContent = isLiked ? 'Liked' : 'Like';
+                });
+            });
+        });
+      </script>  
     

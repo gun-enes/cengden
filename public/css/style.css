@@ -391,6 +391,21 @@ img {
 .square:hover {
   transform: scale(1.1);
 }
+
+/*like button*/
+.liked {
+  color: #fff;
+  background-color: #b30000;
+  border-color: #007bff;
+}
+.like-button {
+  cursor: pointer;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #fd4c46;
+  color: #000;
+}
 /*
 <ul class="article-ul">
       <% data.forEach(vehicle => { %>

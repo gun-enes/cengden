@@ -1,17 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
-const vehicle = require('../models/vehicle')
-const phone = require('../models/phones')
-const lesson = require('../models/lessons')
-const computer = require('../models/computers')
 const bcrypt = require('bcrypt');
+const session = require('express-session');
 const jwt = require('jsonwebtoken');
 
 const adminLayout = '../views/layouts/admin';
 const jwtSecret = process.env.JWT_SECRET;
 
-
+const User = require('../models/user');
+const vehicle = require('../models/vehicle')
+const phone = require('../models/phones')
+const lesson = require('../models/lessons')
+const computer = require('../models/computers')
+/*
+const initializePassport = require('./passport-config')
+initializePassport(
+  passport,
+  email => User.findOne( { username } ),
+  id => users.find(user => user.id === id)
+)
+*/
 /**
  * 
  * Check Login
@@ -78,24 +86,86 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne( { username } );
 
     if(!user) {
-      return res.status(401).json( { message: 'Invalid credentials' } );
+      res.redirect('/loginfailed');
     }
+    else{
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if(!isPasswordValid) {
-      return res.status(401).json( { message: 'Invalid credentials' } );
+      if(!isPasswordValid) {
+        res.redirect('/loginfailed');
+      }
+      else{
+        const token = jwt.sign({ userId: user._id}, jwtSecret );
+        res.cookie('token', token, { httpOnly: true });
+        req.session.userName = user.username;
+        res.redirect('/dashboard');
+      }
     }
-
-    const token = jwt.sign({ userId: user._id}, jwtSecret );
-    res.cookie('token', token, { httpOnly: true });
-    res.redirect('/dashboard');
-
   } catch (error) {
     console.log(error);
   }
 });
 
+//login failed route
+router.get('/loginfailed', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'loginfailed',
+      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
+    }
+
+    const data = await vehicle.find();
+    res.render('admin/loginfailed', {
+      locals,
+      data,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+//register failed route
+router.get('/registerfailed', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Register Failed',
+      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
+    }
+
+    const data = await vehicle.find();
+    res.render('admin/registerfailed', {
+      locals,
+      data,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+//Register Successful route
+router.get('/loginsuccess', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Successful Registration',
+      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
+    }
+
+    const data = await vehicle.find();
+    res.render('admin/loginsuccess', {
+      locals,
+      data,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
 /**
  * POST /
  * Admin - Register
@@ -107,13 +177,10 @@ router.post('/register', async (req, res) => {
 
     try {
       const user = await User.create({ username, password:hashedPassword });
-      res.redirect("/dashboard");
+      res.redirect("/loginsuccess");
     } 
     catch (error) {
-      if(error.code === 11000) {
-        res.status(409).json({ message: 'User already in use'});
-      }
-      res.status(500).json({ message: 'Internal server error'})
+      res.redirect("/registerfailed");
     }
 
   } catch (error) {
@@ -130,10 +197,17 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
   try {
     const locals = {
       title: 'Dashboard',
-      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
+      description: 'Simple Blog created with NodeJs, Express & MongoDb.',
+      username: req.session.userName
     }
+    const username = req.session.userName
+    console.log(username)
+		const phonesData = await phone.find();
+    const vehiclesData = await vehicle.find({ user: req.session.userName });
+		const lessonsData = await lesson.find();
+		const computersData = await computer.find();
+		const data = phonesData.concat(vehiclesData, lessonsData, computersData);    
 
-    const data = await vehicle.find();
     res.render('admin/dashboard', {
       locals,
       data,
@@ -289,6 +363,9 @@ router.post('/add-vehicle', authMiddleware, async (req, res) => {
   try {
     try {
       const newPost = new vehicle({
+        user: req.session.userName,
+        favorite: false,
+        product: "vehicleinfo",
         title: req.body.title,
         model: req.body.model,
         type: req.body.type,
@@ -320,6 +397,9 @@ router.post('/add-phone', authMiddleware, async (req, res) => {
     try {
       const newPost = new phone({
         title: req.body.title,
+        product: "phoneinfo",
+        user: req.session.userName,
+        favorite: false,
         model: req.body.model,
         type: req.body.type,
         brand: req.body.brand,
@@ -351,7 +431,10 @@ router.post('/add-computer', authMiddleware, async (req, res) => {
       const newPost = new computer({
         title: req.body.title,
         model: req.body.model,
+        user: req.session.userName,
+        favorite: false,
         type: req.body.type,
+        product: "computerinfo",
         brand: req.body.brand,
         image: req.body.image,
         year: req.body.year,
@@ -382,6 +465,9 @@ router.post('/add-lesson', authMiddleware, async (req, res) => {
         title: req.body.title,
         tutor: req.body.tutor,
         lesson: req.body.lesson,
+        user: req.session.userName,
+        product: "lessoninfo",
+        favorite: false,
         location: req.body.location,
         duration: req.body.duration,
         price: req.body.price,

@@ -5,6 +5,14 @@ const VehicleSchema = new Schema({
         type: String,
         required: true
     },
+    favorite: {
+        type: Boolean,
+        required: true,
+    },
+    product: {
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
         required: true

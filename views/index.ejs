@@ -2,24 +2,24 @@
     <h2 class="articles__heading">Latest Posts</h2>
   
     <div class="grid-container">
-      <% combinedData.forEach(vehicle => { %>
+      <% combinedData.forEach(data => { %>
       <div class="grid-item">
-        <img src="<%= vehicle.image %>">
-        <a href="/vehicleinfo/<%= vehicle._id %>">
-          <span><%= vehicle.title %></span>
+        <img src="<%= data.image %>">
+        <a href="/<%= data.product%>/<%= data._id %>">
+          <span><%= data.title %></span>
         </a>
         <span class="article-list__date"></span>
         <div class="info-row">
           <span class="explanation">Type:</span>
-          <span class="info"><%= vehicle.type %></span>
+          <span class="info"><%= data.type %></span>
         </div>
         <div class="info-row">
           <span class="explanation">Brand:</span>
-          <span class="info"><%= vehicle.brand %></span>
+          <span class="info"><%= data.brand %></span>
         </div>
         <div class="info-row">
           <span class="explanation">Model:</span>
-          <span class="info"><%= vehicle.model %></span>
+          <span class="info"><%= data.model %></span>
         </div>
       </div>
       <% }) %>

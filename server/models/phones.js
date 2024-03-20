@@ -2,6 +2,18 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 const phoneSchema = new Schema({
+    user: {
+        type: String,
+        required: true
+    },
+    favorite: {
+        type: Boolean,
+        required: true,
+    },
+    product: {
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
         required: true

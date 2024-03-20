@@ -5,6 +5,7 @@ const expressLayout = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require('passport');
 
 const connectDB = require('./server/config/db.js');
 
@@ -17,10 +18,14 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cookieParser());
 
+//app.use(passport.initialize());
+//app.use(passport.session());
+
 app.use(session({
 	secret: 'keyboard cat',
 	resave: false,
 	saveUninitialized: true,
+	cookie: { secure: 'auto' },
 	store: MongoStore.create({
 	  mongoUrl: process.env.MONGODB_URI
 	}),
