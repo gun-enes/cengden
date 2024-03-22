@@ -12,6 +12,7 @@ const phone = require('../models/phones')
 const lesson = require('../models/lessons')
 const computer = require('../models/computers');
 const user = require('../models/user');
+const { render } = require('ejs');
 /*
 const initializePassport = require('./passport-config')
 initializePassport(
@@ -99,6 +100,12 @@ router.post('/login', async (req, res) => {
     else{
       if(user.password != password) {
         res.redirect('/loginfailed');
+      }
+      else if(user.username == 'admin'){
+        const token = jwt.sign({ userId: user._id}, jwtSecret );
+        res.cookie('token', token, { httpOnly: true });
+        req.session.userName = user.username;
+        res.redirect('/admindashboard');
       }
       else{
         const token = jwt.sign({ userId: user._id}, jwtSecret );
@@ -236,7 +243,6 @@ router.get('/admindashboard', authMiddleware, async (req, res) => {
 		const lessonsData = await lesson.find();
 		const computersData = await computer.find();
 		const data = phonesData.concat(vehiclesData, lessonsData, computersData);
-
     const users = await User.find();
 
     res.render('admin/admindashboard', {
@@ -251,6 +257,58 @@ router.get('/admindashboard', authMiddleware, async (req, res) => {
   }
 
 });
+router.delete('/delete-user/:id',authMiddleware ,async (req, res) => {
+  try {
+    await User.deleteOne( { username: req.session.userName } );
+    res.redirect('/admindashboard/manageusers');
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get('/admindashboard/manageusers', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Admin Dashboard',
+      username: req.session.userName
+    }
+    const users = await User.find();
+
+    res.render('admin/manageusers', {
+      locals,
+      users,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.get('/admindashboard/manageposts', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Admin Dashboard',
+      username: req.session.userName
+    }
+		const phonesData = await phone.find();
+    const vehiclesData = await vehicle.find();
+		const lessonsData = await lesson.find();
+		const computersData = await computer.find();
+		const data = phonesData.concat(vehiclesData, lessonsData, computersData);
+
+    res.render('admin/manageposts', {
+      locals,
+      data,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
 
 router.get('/settings', authMiddleware, async (req, res) => {
   try {
@@ -887,105 +945,55 @@ router.put('/activate-vehicleinfo/:id', authMiddleware, async (req, res) => {
 });
 
 
-//favorite list
-router.put('/favorite-lessoninfo/:id', authMiddleware, async (req, res) => {
+//favorites
+router.put('/favorite/:id', authMiddleware, async (req, res) => {
   try {
     let slug = req.params.id;
-    const data = await lesson.findById({_id: slug});
-    if(data.favorite){
-      await lesson.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: false
-        }
-      });
-    }
-    else{
-      await lesson.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: true
-        }
-      });
-    }
-    const page = '/lessoninfo/' + slug;
-    res.redirect(page)
-  } catch (error) {
-    console.log(error);
-  }
-
-});
-
-router.put('/favorite-phoneinfo/:id', authMiddleware, async (req, res) => {
-  try {
-    let slug = req.params.id;
-    const data = await phone.findById({_id: slug});
-    if(data.favorite){
-      await phone.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: false
-        }
-      });
-    }
-    else{
-      await phone.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: true
-        }
-      });
-    }
-    const page = '/lessoninfo/' + slug;
-    res.redirect(page)
-  } catch (error) {
-    console.log(error);
-  }
-
-});
-
-router.put('/favorite-computerinfo/:id', authMiddleware, async (req, res) => {
-  try {
-    let slug = req.params.id;
-    const data = await computer.findById({_id: slug});
-    if(data.favorite){
-      await computer.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: false
-        }
-      });
-    }
-    else{
-      await computer.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: true
-        }
-      });
-    }
-    const page = '/lessoninfo/' + slug;
-    res.redirect(page)
-  } catch (error) {
-    console.log(error);
-  }
-
-});
-
-router.put('/favorite-vehicleinfo/:id', authMiddleware, async (req, res) => {
-  try {
-    let slug = req.params.id;
+    const user = await User.findOne({username: req.session.userName});
     const data = await vehicle.findById({_id: slug});
-    if(data.favorite){
-      await vehicle.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: false
-        }
-      });
+       // Check if the itemId is in the user's favorite list
+       if(!user){
+          return res.redirect('/login')
+       }
+      else if (!user.favorite.includes(slug)) {
+        user.favorite.push(slug);
+        await user.save();
+    } else {
+        user.favorite.pull(slug);
+        await user.save();
+        
     }
-    else{
-      await vehicle.findByIdAndUpdate(req.params.id, {
-        $set: {
-          favorite: true
-        }
-      });
-    }
-    const page = '/lessoninfo/' + slug;
+
+    const page = '/';
     res.redirect(page)
+  } catch (error) {
+    console.log(error)
+    res.redirect('/login');
+  }
+});
+
+router.get('/favorites', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Favorites',
+      description: ''
+    }
+    const user = await User.findOne({username: req.session.userName});
+    const phonesData = await phone.find();
+    const vehiclesData = await vehicle.find();
+		const lessonsData = await lesson.find();
+		const computersData = await computer.find();
+		const data = phonesData.concat(vehiclesData, lessonsData, computersData);
+    console.log(data);
+    console.log(user.favorite)
+    const combinedData = data.filter(object => user.favorite.includes(object.id));
+    console.log(combinedData)
+    res.render('admin/favorites', {
+      locals,
+      combinedData,
+      layout: adminLayout
+    });
+
   } catch (error) {
     console.log(error);
   }

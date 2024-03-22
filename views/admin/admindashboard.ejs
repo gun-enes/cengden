@@ -1,27 +1,8 @@
-<div class="info-row">
-    <h1>Welcome, <%= locals.username %></h1>
-    <a href="/settings" class="navlink">Settings</a>
-  </div>
-  <div class="info-row">
-      <h2>Posts</h2>
-      <a href="/add-post" class="navlink">+ Add New</a>
-    </div>
-    <ul class="admin-posts">
-      <% data.forEach(data => { %>
-        <li>
-          <a href="/<%= data.product%>/<%= data._id %>">
-            <%= data.title %> &nearr;
-          </a>
-          <text>ActiveStatus: <%= data.active%></text>
-          <div class="admin-post-controls">
-            <a href="/edit-<%= data.product %>/<%= data._id %>" class="btn">Edit</a>
-            <form action="/activate-<%= data.product %>/<%= data._id %>?_method=PUT" method="POST">
-              <input type="submit" value="Activate/Deactivate" class="btn">
-            </form>
-            <form action="/delete-<%= data.product %>/<%= data._id %>?_method=DELETE" method="POST">
-              <input type="submit" value="Delete" class="btn-delete btn">
-            </form>
+    <div class="info-row">
+        <h1>Welcome, <%= locals.username %></h1>
+        <a href="/settings" class="navlink">Settings</a>
+      </div>
+        <div class="squares-container">
+            <a href="/admindashboard/manageusers" class="square">Manage Users</a>
+            <a href="/admindashboard/manageposts" class="square">Manage Posts</a>
           </div>
-        </li>
-      <% }) %>
-    </ul>

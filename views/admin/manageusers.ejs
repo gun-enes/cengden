@@ -1,0 +1,23 @@
+
+  </ul>
+  <h2>Users</h2>
+  <ul class="admin-posts">
+  
+    <% users.forEach(users => { %>
+     
+      <li>
+          <div class="info-row">
+              <span class="user-info"><%= users.username %></span>
+              <span class="user-info"> <%= users.email %></span>
+              <span class="user-info"><%= users.password %></span>
+            </div>
+        
+        <div class="admin-post-controls">
+          <form action="/delete-user/<%= users._id %>?_method=DELETE" method="POST">
+            <input type="submit" value="Delete" class="btn-delete btn">
+          </form>
+        </div>
+      </li>
+  
+    <% }) %>
+  </ul>

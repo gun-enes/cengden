@@ -444,6 +444,15 @@ img {
   background-color: #fd4c46;
   color: #000;
 }
+/*users*/
+.user-info {
+  margin-right: 30px; /* Adds space to the right of each span */
+}
+
+/* Optional: if you want the last item not to have a margin on the right */
+.user-info:last-child {
+  margin-right: 0;
+}
 
 /*
 <ul class="article-ul">

@@ -1,0 +1,30 @@
+<section class="articles">
+    <h2 class="articles__heading">Favorite Posts</h2>
+  
+    <div class="grid-container">
+      <% combinedData.forEach(data => { %>
+      <div class="grid-item">
+        <img src="<%= data.image %>">
+        <a href="/<%= data.product%>/<%= data._id %>">
+          <span><%= data.title %></span>
+        </a>
+        <span class="article-list__date"></span>
+        <div class="info-row">
+          <span class="explanation">Type:</span>
+          <span class="info"><%= data.type %></span>
+        </div>
+        <div class="info-row">
+          <span class="explanation">Description:</span>
+          <span class="info"><%= data.description %></span>
+        </div>
+        <div class="info-row">
+          <span class="explanation">Price:</span>
+          <span class="info"><%= data.price %></span>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    
+  
+  </section>
+  
