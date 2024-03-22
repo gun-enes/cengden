@@ -4,7 +4,7 @@
 
 </div>
 
-<form action="/edit-lesson/<%= data._id %>?_method=PUT" method="POST">
+<form action="/edit-lessoninfo/<%= data._id %>?_method=PUT" method="POST">
     <label for="title"><b>Title</b></label>
     <input type="text" placeholder="Lesson Title" name="title" value="<%= data.title %>">
   
@@ -12,7 +12,7 @@
     <input type="text" placeholder="Tutor Name" name="tutor" value="<%= data.tutor %>">
   
     <label for="lesson"><b>Lesson</b></label>
-    <input type="text" placeholder="Lesson Subject" name="lesson" value="<%= data.lesson %>">
+    <input type="text" placeholder="Lesson Subject" name="lesson" value="<%= data.type %>">
 
     <label for="location"><b>Location</b></label>
     <input type="text" placeholder="Location" name="location" value="<%= data.location %>">
@@ -21,7 +21,7 @@
     <input type="text" placeholder="Duration (e.g., 1 hour)" name="duration" value="<%= data.duration %>">
   
     <label for="price"><b>Price</b></label>
-    <input type="number" placeholder="Price" name="price" value="<%= data.price %>">
+    <input type="text" placeholder="Price" name="price" value="<%= data.price %>">
 
     <label for="image"><b>Image URL</b></label>
     <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>">

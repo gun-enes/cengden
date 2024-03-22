@@ -14,10 +14,10 @@ router.get('/', async (req,res) => {
 		description: "An online marketplace application"
 	};
 	try{
-		const phonesData = await phone.find();
-		const vehiclesData = await vehicle.find();
-		const lessonsData = await lesson.find();
-		const computersData = await computer.find();
+		const phonesData = await phone.find({active: {$ne: false}});
+		const vehiclesData = await vehicle.find({active: {$ne: false}});
+		const lessonsData = await lesson.find({active: {$ne: false}});
+		const computersData = await computer.find({active: {$ne: false}});
 		const combinedData = phonesData.concat(vehiclesData, lessonsData, computersData);
 		res.render('index', {locals, combinedData});
 	}catch(err){
@@ -32,7 +32,7 @@ router.get('/vehicles', async (req,res) => {
 		description: "An online marketplace application"
 	};
 	try{
-		const data = await vehicle.find();
+		const data = await vehicle.find({active: {$ne: false}});
 		res.render('vehicles/vehicles', {locals, data});
 	}catch(err){
 		console.log(err);
@@ -45,7 +45,7 @@ router.get('/computers', async (req,res) => {
 		description: "An online marketplace application"
 	};
 	try{
-		const data = await computer.find();
+		const data = await computer.find({active: {$ne: false}});
 		res.render('computers/computers', {locals, data});
 	}catch(err){
 		console.log(err);
@@ -58,7 +58,7 @@ router.get('/phones', async (req,res) => {
 		description: "An online marketplace application"
 	};
 	try{
-		const data = await phone.find();
+		const data = await phone.find({active: {$ne: false}});
 		res.render('phones/phones', {locals, data});
 	}catch(err){
 		console.log(err);
@@ -71,7 +71,7 @@ router.get('/lessons', async (req,res) => {
 		description: "An online marketplace application"
 	};
 	try{
-		const data = await lesson.find();
+		const data = await lesson.find({active: {$ne: false}});
 		res.render('lessons/lessons', {locals, data});
 	}catch(err){
 		console.log(err);

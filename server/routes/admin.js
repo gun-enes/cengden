@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
 
@@ -11,7 +10,8 @@ const User = require('../models/user');
 const vehicle = require('../models/vehicle')
 const phone = require('../models/phones')
 const lesson = require('../models/lessons')
-const computer = require('../models/computers')
+const computer = require('../models/computers');
+const user = require('../models/user');
 /*
 const initializePassport = require('./passport-config')
 initializePassport(
@@ -28,7 +28,7 @@ const authMiddleware = (req, res, next ) => {
   const token = req.cookies.token;
 
   if(!token) {
-    return res.status(401).json( { message: 'Unauthorized'} );
+    return res.render('admin/login');
   }
 
   try { 
@@ -56,6 +56,14 @@ router.get('/login', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+/*
+Logout
+*/
+router.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  //res.json({ message: 'Logout successful.'});
+  res.redirect('/');
 });
 
 /**
@@ -89,9 +97,7 @@ router.post('/login', async (req, res) => {
       res.redirect('/loginfailed');
     }
     else{
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if(!isPasswordValid) {
+      if(user.password != password) {
         res.redirect('/loginfailed');
       }
       else{
@@ -107,7 +113,7 @@ router.post('/login', async (req, res) => {
 });
 
 //login failed route
-router.get('/loginfailed', authMiddleware, async (req, res) => {
+router.get('/loginfailed', async (req, res) => {
   try {
     const locals = {
       title: 'loginfailed',
@@ -127,17 +133,15 @@ router.get('/loginfailed', authMiddleware, async (req, res) => {
 
 });
 //register failed route
-router.get('/registerfailed', authMiddleware, async (req, res) => {
+router.get('/registerfailed', async (req, res) => {
   try {
     const locals = {
       title: 'Register Failed',
       description: 'Simple Blog created with NodeJs, Express & MongoDb.'
     }
 
-    const data = await vehicle.find();
     res.render('admin/registerfailed', {
       locals,
-      data,
       layout: adminLayout
     });
 
@@ -172,14 +176,17 @@ router.get('/loginsuccess', authMiddleware, async (req, res) => {
 */
 router.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-      const user = await User.create({ username, password:hashedPassword });
+      const user = await User.create({ 
+        username: req.body.username, 
+        email: req.body.email,
+        password: req.body.password,
+        favorite: [] });
       res.redirect("/loginsuccess");
     } 
     catch (error) {
+      console.log(error)
       res.redirect("/registerfailed");
     }
 
@@ -191,7 +198,7 @@ router.post('/register', async (req, res) => {
 
 /**
  * GET /
- * Admin Dashboard
+ * Dashboard
 */
 router.get('/dashboard', authMiddleware, async (req, res) => {
   try {
@@ -200,8 +207,6 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
       description: 'Simple Blog created with NodeJs, Express & MongoDb.',
       username: req.session.userName
     }
-    const username = req.session.userName
-    console.log(username)
 		const phonesData = await phone.find({ user: req.session.userName });
     const vehiclesData = await vehicle.find({ user: req.session.userName });
 		const lessonsData = await lesson.find({ user: req.session.userName });
@@ -220,19 +225,103 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
 
 });
 
+router.get('/admindashboard', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Admin Dashboard',
+      username: req.session.userName
+    }
+		const phonesData = await phone.find();
+    const vehiclesData = await vehicle.find();
+		const lessonsData = await lesson.find();
+		const computersData = await computer.find();
+		const data = phonesData.concat(vehiclesData, lessonsData, computersData);
+
+    const users = await User.find();
+
+    res.render('admin/admindashboard', {
+      locals,
+      data,
+      users,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.get('/settings', authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: 'Settings',
+      username: req.session.userName
+    } 
+    console.log(req.session.userName)
+    const data = await User.findOne({ username: req.session.userName });
+    if (!data) {
+      // Handle the case where no user is found
+      console.log('No user found with that username');
+    } else {
+      // Use the found user data
+      console.log(data);
+    }
+    res.render('admin/settings', {
+      locals,
+      data,
+      layout: adminLayout
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/settings/:id', authMiddleware, async (req, res) => {
+  try {
+    await user.findByIdAndUpdate(req.params.id, {
+      $set: {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+      }
+    });
+    req.session.userName = req.body.username
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    res.redirect('/updatefailed')
+  }
+
+});
 
 
+router.get('/updatefailed',authMiddleware ,async (req, res) => {
+  try {
+    const locals = {
+      title: 'Account Update Failed',
+      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
+    }
 
+    res.render('admin/updatefailed', {
+      locals,
+      layout: adminLayout
+    });
 
+  } catch (error) {
+    console.log(error);
+  }
 
-
+});
 
 
 /**
  * DELETE /
  * Admin - Delete Post
 */
-router.delete('/delete-vehicle/:id', async (req, res) => {
+router.delete('/delete-vehicleinfo/:id', async (req, res) => {
 
   try {
     await vehicle.deleteOne( { _id: req.params.id } );
@@ -243,7 +332,7 @@ router.delete('/delete-vehicle/:id', async (req, res) => {
 
 });
 
-router.delete('/delete-phone/:id', authMiddleware, async (req, res) => {
+router.delete('/delete-phoneinfo/:id', authMiddleware, async (req, res) => {
 
   try {
     await phone.deleteOne( { _id: req.params.id } );
@@ -253,7 +342,7 @@ router.delete('/delete-phone/:id', authMiddleware, async (req, res) => {
   }
 
 });
-router.delete('/delete-computer/:id', authMiddleware, async (req, res) => {
+router.delete('/delete-computerinfo/:id', authMiddleware, async (req, res) => {
 
   try {
     await computer.deleteOne( { _id: req.params.id } );
@@ -263,7 +352,7 @@ router.delete('/delete-computer/:id', authMiddleware, async (req, res) => {
   }
 
 });
-router.delete('/delete-lesson/:id', authMiddleware, async (req, res) => {
+router.delete('/delete-lessoninfo/:id', authMiddleware, async (req, res) => {
 
   try {
     await lesson.deleteOne( { _id: req.params.id } );
@@ -275,7 +364,7 @@ router.delete('/delete-lesson/:id', authMiddleware, async (req, res) => {
 });
 
 //edit post
-router.get('/edit-vehicle/:id', authMiddleware, async (req, res) => {
+router.get('/edit-vehicleinfo/:id', authMiddleware, async (req, res) => {
   try {
     const data = await vehicle.findOne({_id: req.params.id});
     res.render('admin/edit-vehicle' ,{
@@ -288,9 +377,10 @@ router.get('/edit-vehicle/:id', authMiddleware, async (req, res) => {
 
 });
 
-router.put('/edit-vehicle/:id', authMiddleware, async (req, res) => {
+router.put('/edit-vehicleinfo/:id', authMiddleware, async (req, res) => {
   try {
     await vehicle.findByIdAndUpdate(req.params.id, {
+      active: true,
         user: req.session.userName,
         favorite: false,
         product: "vehicleinfo",
@@ -317,7 +407,7 @@ router.put('/edit-vehicle/:id', authMiddleware, async (req, res) => {
 
 });
 
-router.get('/edit-phone/:id', authMiddleware, async (req, res) => {
+router.get('/edit-phoneinfo/:id', authMiddleware, async (req, res) => {
   try {
     const data = await phone.findOne({_id: req.params.id});
     res.render('admin/edit-vehicle' ,{
@@ -330,9 +420,10 @@ router.get('/edit-phone/:id', authMiddleware, async (req, res) => {
 
 });
 
-router.put('/edit-phone/:id', authMiddleware, async (req, res) => {
+router.put('/edit-phoneinfo/:id', authMiddleware, async (req, res) => {
   try {
     await phone.findByIdAndUpdate(req.params.id, {
+      active: true,
       title: req.body.title,
       product: "phoneinfo",
       user: req.session.userName,
@@ -359,7 +450,7 @@ router.put('/edit-phone/:id', authMiddleware, async (req, res) => {
 
 });
 
-router.get('/edit-computer/:id', authMiddleware, async (req, res) => {
+router.get('/edit-computerinfo/:id', authMiddleware, async (req, res) => {
   try {
     const data = await computer.findOne({_id: req.params.id});
     res.render('admin/edit-computer' ,{
@@ -371,9 +462,10 @@ router.get('/edit-computer/:id', authMiddleware, async (req, res) => {
   }
 
 });
-router.put('/edit-computer/:id', authMiddleware, async (req, res) => {
+router.put('/edit-computerinfo/:id', authMiddleware, async (req, res) => {
   try {
     await computer.findByIdAndUpdate(req.params.id, {
+      active: true,
       title: req.body.title,
       model: req.body.model,
       user: req.session.userName,
@@ -400,7 +492,7 @@ router.put('/edit-computer/:id', authMiddleware, async (req, res) => {
 
 });
 
-router.get('/edit-lesson/:id', authMiddleware, async (req, res) => {
+router.get('/edit-lessoninfo/:id', authMiddleware, async (req, res) => {
   try {
     const data = await lesson.findOne({_id: req.params.id});
     res.render('admin/edit-lesson' ,{
@@ -412,9 +504,10 @@ router.get('/edit-lesson/:id', authMiddleware, async (req, res) => {
   }
 
 });
-router.put('/edit-lesson/:id', authMiddleware, async (req, res) => {
+router.put('/edit-lessoninfo/:id', authMiddleware, async (req, res) => {
   try {
     await lesson.findByIdAndUpdate(req.params.id, {
+      active: true,
         title: req.body.title,
         tutor: req.body.tutor,
         type: req.body.lesson,
@@ -563,6 +656,7 @@ router.post('/add-vehicle', authMiddleware, async (req, res) => {
   try {
     try {
       const newPost = new vehicle({
+        active: true,
         user: req.session.userName,
         favorite: false,
         product: "vehicleinfo",
@@ -596,6 +690,7 @@ router.post('/add-phone', authMiddleware, async (req, res) => {
   try {
     try {
       const newPost = new phone({
+        active: true,
         title: req.body.title,
         product: "phoneinfo",
         user: req.session.userName,
@@ -629,6 +724,7 @@ router.post('/add-computer', authMiddleware, async (req, res) => {
   try {
     try {
       const newPost = new computer({
+        active: true,
         title: req.body.title,
         model: req.body.model,
         user: req.session.userName,
@@ -662,6 +758,7 @@ router.post('/add-lesson', authMiddleware, async (req, res) => {
   try {
     try {
       const newPost = new lesson({
+        active: true,
         title: req.body.title,
         tutor: req.body.tutor,
         type: req.body.lesson,
@@ -685,4 +782,215 @@ router.post('/add-lesson', authMiddleware, async (req, res) => {
     console.log(error);
   }
 });
+
+
+//activate
+router.put('/activate-lessoninfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await lesson.findById({_id: slug});
+    if(data.active){
+      await lesson.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: false
+        }
+      });
+    }
+    else{
+      await lesson.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: true
+        }
+      });
+    }
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.put('/activate-computerinfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await computer.findById({_id: slug});
+    if(data.active){
+      await computer.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: false
+        }
+      });
+    }
+    else{
+      await computer.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: true
+        }
+      });
+    }
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.put('/activate-phoneinfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await phone.findById({_id: slug});
+    if(data.active){
+      await phone.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: false
+        }
+      });
+    }
+    else{
+      await phone.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: true
+        }
+      });
+    }
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.put('/activate-vehicleinfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await vehicle.findById({_id: slug});
+    if(data.active){
+      await vehicle.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: false
+        }
+      });
+    }
+    else{
+      await vehicle.findByIdAndUpdate(req.params.id, {
+        $set: {
+          active: true
+        }
+      });
+    }
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+
+//favorite list
+router.put('/favorite-lessoninfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await lesson.findById({_id: slug});
+    if(data.favorite){
+      await lesson.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: false
+        }
+      });
+    }
+    else{
+      await lesson.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: true
+        }
+      });
+    }
+    const page = '/lessoninfo/' + slug;
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/favorite-phoneinfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await phone.findById({_id: slug});
+    if(data.favorite){
+      await phone.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: false
+        }
+      });
+    }
+    else{
+      await phone.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: true
+        }
+      });
+    }
+    const page = '/lessoninfo/' + slug;
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/favorite-computerinfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await computer.findById({_id: slug});
+    if(data.favorite){
+      await computer.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: false
+        }
+      });
+    }
+    else{
+      await computer.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: true
+        }
+      });
+    }
+    const page = '/lessoninfo/' + slug;
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/favorite-vehicleinfo/:id', authMiddleware, async (req, res) => {
+  try {
+    let slug = req.params.id;
+    const data = await vehicle.findById({_id: slug});
+    if(data.favorite){
+      await vehicle.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: false
+        }
+      });
+    }
+    else{
+      await vehicle.findByIdAndUpdate(req.params.id, {
+        $set: {
+          favorite: true
+        }
+      });
+    }
+    const page = '/lessoninfo/' + slug;
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+
 module.exports = router;

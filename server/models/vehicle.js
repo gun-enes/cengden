@@ -9,6 +9,10 @@ const VehicleSchema = new Schema({
         type: Boolean,
         required: true,
     },
+    active: {
+        type: Boolean,
+        required: true,
+    },
     product: {
         type: String,
         required: true,

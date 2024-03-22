@@ -6,6 +6,10 @@ const phoneSchema = new Schema({
         type: String,
         required: true
     },
+    active: {
+        type: Boolean,
+        required: true,
+    },
     favorite: {
         type: Boolean,
         required: true,

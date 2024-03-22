@@ -105,6 +105,7 @@ img {
 .header__logo {
   font-weight: 800;
   font-size: 25px;
+  padding-right: 30px;
   text-decoration: none;
   grid-area: logo;
 }
@@ -134,7 +135,7 @@ img {
   gap: 0.3rem;
   align-items: center;
   border: 0;
-  padding: 6px 12px;
+  padding: 6px 6px;
   background: none;
   border-radius: 10px;
   border: 2px solid transparent;
@@ -145,6 +146,43 @@ img {
 
 .header__button button:hover {
   border: 2px solid var(--black);
+}
+
+.nav-list {
+  list-style-type: none;
+  margin: 0;
+  font-weight: 600;
+  padding: 0;
+}
+
+.nav-item {
+  display: inline;
+  margin-right: 20px;
+}
+
+.nav-link2 {
+  text-decoration: none;
+  color: #000000;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #000000
+}
+
+.header-lower {
+  background-color: #ddd; /* Slightly darker grey */
+  padding: 10px 0;
+  text-align: center;
+}
+
+.nav-container {
+  padding: 0;
+}
+
+.nav-item-inline {
+  display: inline;
+  margin: 0 10px;
 }
 
 /* Header -> Navigation */
@@ -314,7 +352,7 @@ img {
 }
 
 #searchClose {
-  position: absolute;
+  position: relative;
   top: 0;
   right: 0;
   color: var(--gray-light);
@@ -406,6 +444,7 @@ img {
   background-color: #fd4c46;
   color: #000;
 }
+
 /*
 <ul class="article-ul">
       <% data.forEach(vehicle => { %>

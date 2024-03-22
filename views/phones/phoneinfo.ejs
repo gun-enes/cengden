@@ -1,5 +1,14 @@
 <img src="<%= data.image %>">
-<h2 class="articles__heading"><%= data.title %></h2>
+<div class="info-row">
+    <h2 class="articles__heading"><%= data.title %></h2>
+    <form action="/favorite-<%= data.product %>/<%= data._id %>?_method=PUT" method="POST">
+        <input type="submit" value="Add to/remove from favorite list" class="btn">
+    </form>
+</div>
+<div class="info-row">
+    <span class="explanation">Favorite:</span>
+    <span class="info"><%= data.favorite%></span>
+</div>
     <div class="info-row">
         <span class="explanation">Type:</span>
         <span class="info"><%= data.type %></span>

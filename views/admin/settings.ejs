@@ -1,0 +1,16 @@
+<h3>Account Settings</h3>
+
+<form action="/settings/<%= data._id %>?_method=PUT" method="POST">
+
+  <label for="username"><b>Username</b></label>
+  <input type="text" placeholder="Enter Username" name="username" value="<%= data.username %>">
+
+  <label for="email"><b>Email</b></label>
+  <input type="email" placeholder="Enter Email" name="email" value="<%= data.email %>">
+
+  <label for="password"><b>Password</b></label>
+  <input type="password" placeholder="Enter Password" name="password" value="<%= data.password %>">
+
+  <input type="submit" value="Update" class="btn">
+
+</form>
