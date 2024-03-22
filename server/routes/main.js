@@ -8,7 +8,7 @@ const lesson = require('../models/lessons')
 
 
 //Home Route
-router.get('', async (req,res) => {
+router.get('/', async (req,res) => {
 	const locals = {
 		title: "CENGden",
 		description: "An online marketplace application"
@@ -162,14 +162,33 @@ router.post('/search', async (req,res) => {
 		let searchTerm = req.body.searchTerm;
 		const searchNoSpecialChars = searchTerm.replace(/[^a-zA-Z0-9 ]/g,"");
 
-		const data = await vehicle.find({
+		const vehicledata = await vehicle.find({
 			$or: [
 				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
 				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
 			]
 		})
+		const phonedata = await phone.find({
+			$or: [
+				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+			]
+		})
+		const lessondata = await lesson.find({
+			$or: [
+				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+			]
+		})
+		const data = await computer.find({
+			$or: [
+				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+			]
+		})
+		const combinedData = data.concat(vehicledata, lessondata, phonedata);
 		res.render("search",{
-			data,
+			combinedData,
 			locals
 		});
 	}catch(err){

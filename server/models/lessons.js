@@ -22,7 +22,7 @@ const lessonSchema = new Schema({
         type: String,
         required: true
     },
-    lesson: {
+    type: {
         type: String,
         required: true
     },

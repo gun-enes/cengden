@@ -274,6 +274,178 @@ router.delete('/delete-lesson/:id', authMiddleware, async (req, res) => {
 
 });
 
+//edit post
+router.get('/edit-vehicle/:id', authMiddleware, async (req, res) => {
+  try {
+    const data = await vehicle.findOne({_id: req.params.id});
+    res.render('admin/edit-vehicle' ,{
+      data,
+      layout: adminLayout
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/edit-vehicle/:id', authMiddleware, async (req, res) => {
+  try {
+    await vehicle.findByIdAndUpdate(req.params.id, {
+        user: req.session.userName,
+        favorite: false,
+        product: "vehicleinfo",
+        title: req.body.title,
+        model: req.body.model,
+        type: req.body.type,
+        brand: req.body.brand,
+        image: req.body.image,
+        year: req.body.year,
+        color: req.body.color,
+        engine_displacement: req.body.engvehicleine_displacement,
+        fuel_type: req.body.fuel_type,
+        transmission_type: req.body.transmission_type,
+        mileage: req.body.mileage,
+        price: req.body.price,
+        description: req.body.description,
+
+    });
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.get('/edit-phone/:id', authMiddleware, async (req, res) => {
+  try {
+    const data = await phone.findOne({_id: req.params.id});
+    res.render('admin/edit-vehicle' ,{
+      data,
+      layout: adminLayout
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.put('/edit-phone/:id', authMiddleware, async (req, res) => {
+  try {
+    await phone.findByIdAndUpdate(req.params.id, {
+      title: req.body.title,
+      product: "phoneinfo",
+      user: req.session.userName,
+      favorite: false,
+      model: req.body.model,
+      type: req.body.type,
+      brand: req.body.brand,
+      image: req.body.image,
+      year: req.body.year,
+      cpu: req.body.cpu,
+      ram: req.body.ram,
+      storage: req.body.storage,
+      camera: req.body.camera,
+      os: req.body.os,
+      price: req.body.price,
+      description: req.body.description,
+
+    });
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.get('/edit-computer/:id', authMiddleware, async (req, res) => {
+  try {
+    const data = await computer.findOne({_id: req.params.id});
+    res.render('admin/edit-computer' ,{
+      data,
+      layout: adminLayout
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.put('/edit-computer/:id', authMiddleware, async (req, res) => {
+  try {
+    await computer.findByIdAndUpdate(req.params.id, {
+      title: req.body.title,
+      model: req.body.model,
+      user: req.session.userName,
+      favorite: false,
+      type: req.body.type,
+      product: "computerinfo",
+      brand: req.body.brand,
+      image: req.body.image,
+      year: req.body.year,
+      cpu: req.body.cpu,
+      ram: req.body.ram,
+      storage: req.body.storage,
+      gpu: req.body.gpu,
+      os: req.body.os,
+      price: req.body.price,
+      description: req.body.description,
+
+    });
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+router.get('/edit-lesson/:id', authMiddleware, async (req, res) => {
+  try {
+    const data = await lesson.findOne({_id: req.params.id});
+    res.render('admin/edit-lesson' ,{
+      data,
+      layout: adminLayout
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+router.put('/edit-lesson/:id', authMiddleware, async (req, res) => {
+  try {
+    await lesson.findByIdAndUpdate(req.params.id, {
+        title: req.body.title,
+        tutor: req.body.tutor,
+        type: req.body.lesson,
+        user: req.session.userName,
+        product: "lessoninfo",
+        favorite: false,
+        location: req.body.location,
+        duration: req.body.duration,
+        price: req.body.price,
+        description: req.body.description,
+        image: req.body.image,
+
+    });
+    const page = '/dashboard';
+    res.redirect(page)
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+
+
+
+
+
+
+
+
+
+
 /**
  * GET /
  * Admin Logout
@@ -293,8 +465,6 @@ router.get('/add-post', authMiddleware, async (req, res) => {
       title: 'Add Post',
       description: 'Simple Blog created with NodeJs, Express & MongoDb.'
     }
-
-    const data = await vehicle.find();
     res.render('admin/add-post', {
       locals,
       layout: adminLayout
@@ -494,7 +664,7 @@ router.post('/add-lesson', authMiddleware, async (req, res) => {
       const newPost = new lesson({
         title: req.body.title,
         tutor: req.body.tutor,
-        lesson: req.body.lesson,
+        type: req.body.lesson,
         user: req.session.userName,
         product: "lessoninfo",
         favorite: false,

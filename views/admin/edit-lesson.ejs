@@ -1,0 +1,35 @@
+<a href="/dashboard">&larr; Back</a>
+<div class="admin-title">
+  <h2>View / Edit Post</h2>
+
+</div>
+
+<form action="/edit-lesson/<%= data._id %>?_method=PUT" method="POST">
+    <label for="title"><b>Title</b></label>
+    <input type="text" placeholder="Lesson Title" name="title" value="<%= data.title %>">
+  
+    <label for="tutor"><b>Tutor</b></label>
+    <input type="text" placeholder="Tutor Name" name="tutor" value="<%= data.tutor %>">
+  
+    <label for="lesson"><b>Lesson</b></label>
+    <input type="text" placeholder="Lesson Subject" name="lesson" value="<%= data.lesson %>">
+
+    <label for="location"><b>Location</b></label>
+    <input type="text" placeholder="Location" name="location" value="<%= data.location %>">
+  
+    <label for="duration"><b>Duration</b></label>
+    <input type="text" placeholder="Duration (e.g., 1 hour)" name="duration" value="<%= data.duration %>">
+  
+    <label for="price"><b>Price</b></label>
+    <input type="number" placeholder="Price" name="price" value="<%= data.price %>">
+
+    <label for="image"><b>Image URL</b></label>
+    <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>">
+  
+    <label for="description"><b>Description</b></label>
+    <textarea placeholder="Lesson Description" name="description"><%= data.description %></textarea>
+  
+
+  <input type="submit" value="Update" class="btn">
+
+</form>

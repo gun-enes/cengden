@@ -1,0 +1,59 @@
+<a href="/dashboard">&larr; Back</a>
+<div class="admin-title">
+  <h2>View / Edit Post</h2>
+</div>
+
+<form action="/edit-vehicle/<%= data._id %>?_method=PUT" method="POST">
+
+  <label for="title"><b>Title</b></label>
+  <input type="text" placeholder="Post Title" name="title" value="<%= data.title %>"> 
+
+  <label for="model"><b>Model</b></label>
+  <input type="text" placeholder="Model" name="model" value="<%= data.model %>"> 
+
+  <label for="type"><b>Type</b></label>
+  <input type="text" placeholder="Type" name="type" value="<%= data.type %>"> 
+
+  <label for="brand"><b>Brand</b></label>
+  <input type="text" placeholder="Brand" name="brand" value="<%= data.brand %>"> 
+
+  <label for="image"><b>Image URL</b></label>
+  <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>"> 
+
+  <label for="year"><b>Year</b></label>
+  <input type="text" placeholder="Year" name="year" value="<%= data.year %>"> 
+
+  <label for="color"><b>Color</b></label>
+  <input type="text" placeholder="Color" name="color" value="<%= data.color %>"> 
+
+  <label for="engine_displacement"><b>Engine Displacement</b></label>
+  <input type="text" placeholder="Engine Displacement" name="engine_displacement" value="<%= data.engine_displacement %>"> 
+
+  <label for="fuel_type"><b>Fuel Type</b></label>
+  <select name="fuel_type" value="<%= data.fuel_type %>">
+    <option value="Petrol">Petrol</option>
+    <option value="Diesel">Diesel</option>
+    <option value="Electric">Electric</option>
+    <option value="Hybrid">Hybrid</option>
+    <!-- Add more options as necessary -->
+  </select>
+
+  <label for="transmission_type"><b>Transmission Type</b></label>
+  <select name="transmission_type" value="<%= data.transmission_type %>">
+    <option value="Manual">Manual</option>
+    <option value="Automatic">Automatic</option>
+    <!-- Add more options as necessary -->
+  </select>
+
+  <label for="mileage"><b>Mileage</b></label>
+  <input type="text" placeholder="Mileage" name="mileage" value="<%= data.mileage %>"> 
+
+  <label for="price"><b>Price</b></label>
+  <input type="text" placeholder="Price" name="price" value="<%= data.price %>"> 
+
+  <label for="description"><b>Description</b></label>
+  <textarea placeholder="Description" name="description"><%= data.description %></textarea>
+
+  <input type="submit" value="Update" class="btn">
+
+</form>

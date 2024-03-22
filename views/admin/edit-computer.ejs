@@ -1,0 +1,49 @@
+<a href="/dashboard">&larr; Back</a>
+<div class="admin-title">
+  <h2>View / Edit Post</h2>
+
+</div>
+
+<form action="/edit-computer/<%= data._id %>?_method=PUT" method="POST">
+    <label for="title"><b>Title</b></label>
+    <input type="text" placeholder="Title" name="title" value="<%= data.title %>">
+  
+    <label for="model"><b>Model</b></label>
+    <input type="text" placeholder="Model" name="model" value="<%= data.model %>">
+  
+    <label for="type"><b>Type</b></label>
+    <input type="text" placeholder="Type" name="type" value="<%= data.type %>">
+  
+    <label for="brand"><b>Brand</b></label>
+    <input type="text" placeholder="Brand" name="brand" value="<%= data.brand %>">
+  
+    <label for="image"><b>Image URL</b></label>
+    <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>">
+  
+    <label for="year"><b>Year</b></label>
+    <input type="number" placeholder="Year" name="year" value="<%= data.year %>">
+  
+    <label for="cpu"><b>CPU</b></label>
+    <input type="text" placeholder="CPU" name="cpu" value="<%= data.cpu %>">
+  
+    <label for="ram"><b>RAM</b></label>
+    <input type="text" placeholder="RAM" name="ram" value="<%= data.ram %>">
+  
+    <label for="storage"><b>Storage</b></label>
+    <input type="text" placeholder="Storage" name="storage" value="<%= data.storage %>">
+  
+    <label for="camera"><b>Camera</b></label>
+    <input type="text" placeholder="Camera" name="Camera" value="<%= data.gpu %>">
+  
+    <label for="os"><b>Operating System</b></label>
+    <input type="text" placeholder="OS" name="os" value="<%= data.os %>">
+  
+    <label for="price"><b>Price</b></label>
+    <input type="text" placeholder="Price" name="price" value="<%= data.price %>">
+  
+    <label for="description"><b>Description</b></label>
+    <textarea placeholder="Description" name="description"><%= data.description %></textarea>
+  
+  <input type="submit" value="Update" class="btn">
+
+</form>

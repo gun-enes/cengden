@@ -13,7 +13,7 @@
           <%= data.title %> &nearr;
         </a>
         <div class="admin-post-controls">
-          <a href="/edit-post/<%= data._id %>" class="btn">Edit</a>
+          <a href="/edit-<%= data.product %>/<%= data._id %>" class="btn">Edit</a>
   
           <form action="/delete-<%= data.product %>/<%= data._id %>?_method=DELETE" method="POST">
             <input type="submit" value="Delete" class="btn-delete btn">
