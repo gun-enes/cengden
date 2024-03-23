@@ -113,7 +113,7 @@ router.get('/phoneinfo/:id', async (req,res) => {
 			description: "An online marketplace application"
 		};
 		let slug = req.params.id;
-		const data = await vehicle.findById({_id: slug});
+		const data = await phone.findById({_id: slug});
 		const user = await User.findOne({username: req.session.userName});
 		if (user && user.favorite.includes(slug)) {
 			const fav = "Liked"
@@ -135,7 +135,7 @@ router.get('/computerinfo/:id', async (req,res) => {
 			description: "An online marketplace application"
 		};
 		let slug = req.params.id;
-		const data = await vehicle.findById({_id: slug});
+		const data = await computer.findById({_id: slug});
 		const user = await User.findOne({username: req.session.userName});
 		if (user && user.favorite.includes(slug)) {
 			const fav = "Liked"
@@ -157,7 +157,7 @@ router.get('/lessoninfo/:id', async (req,res) => {
 			description: "An online marketplace application"
 		};
 		let slug = req.params.id;
-		const data = await vehicle.findById({_id: slug});
+		const data = await lesson.findById({_id: slug});
 		const user = await User.findOne({username: req.session.userName});
 		if (user && user.favorite.includes(slug)) {
 			const fav = "Liked"
