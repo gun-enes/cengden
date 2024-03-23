@@ -5,10 +5,6 @@ const VehicleSchema = new Schema({
         type: String,
         required: true
     },
-    favorite: {
-        type: Boolean,
-        required: true,
-    },
     active: {
         type: Boolean,
         required: true,
@@ -47,7 +43,6 @@ const VehicleSchema = new Schema({
     },
     engine_displacement: {
         type: String,
-        required: true
     },
     fuel_type: {
         type: String,
@@ -69,6 +64,25 @@ const VehicleSchema = new Schema({
         type: String,
         required: true
     },
+    battery_capacity: {
+        type: String,
+    },
+    range: {
+        type: String,
+    },
+    bed_capacity: {
+        type: String,
+    },
+    water_tank: {
+        type: String,
+    },
+    payload_capacity: {
+        type: String,
+    },
+    drive_type: {
+        type: String,
+        required: true
+    }
 })
 
 module.exports = mongoose.model('vehicle', VehicleSchema);

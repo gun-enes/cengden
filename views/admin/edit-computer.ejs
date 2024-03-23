@@ -6,44 +6,59 @@
 
 <form action="/edit-computerinfo/<%= data._id %>?_method=PUT" method="POST">
     <label for="title"><b>Title</b></label>
-    <input type="text" placeholder="Title" name="title" value="<%= data.title %>">
+    <input type="text" placeholder="Title" name="title" value="<%= data.title %>" required>
   
     <label for="model"><b>Model</b></label>
-    <input type="text" placeholder="Model" name="model" value="<%= data.model %>">
+    <input type="text" placeholder="Model" name="model" value="<%= data.model %>" required>
   
     <label for="type"><b>Type</b></label>
-    <input type="text" placeholder="Type" name="type" value="<%= data.type %>">
+    <input type="text" placeholder="Type" name="type" value="<%= data.type %>" required>
   
     <label for="brand"><b>Brand</b></label>
-    <input type="text" placeholder="Brand" name="brand" value="<%= data.brand %>">
+    <input type="text" placeholder="Brand" name="brand" value="<%= data.brand %>" required>
   
     <label for="image"><b>Image URL</b></label>
-    <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>">
+    <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>" required>
   
     <label for="year"><b>Year</b></label>
-    <input type="number" placeholder="Year" name="year" value="<%= data.year %>">
+    <input type="number" placeholder="Year" name="year" value="<%= data.year %>" required>
   
     <label for="cpu"><b>CPU</b></label>
-    <input type="text" placeholder="CPU" name="cpu" value="<%= data.cpu %>">
+    <input type="text" placeholder="CPU" name="cpu" value="<%= data.cpu %>" required>
   
     <label for="ram"><b>RAM</b></label>
-    <input type="text" placeholder="RAM" name="ram" value="<%= data.ram %>">
+    <input type="text" placeholder="RAM" name="ram" value="<%= data.ram %>" required>
   
     <label for="storage"><b>Storage</b></label>
-    <input type="text" placeholder="Storage" name="storage" value="<%= data.storage %>">
+    <input type="text" placeholder="Storage" name="storage" value="<%= data.storage %>" required>
   
     <label for="camera"><b>Camera</b></label>
-    <input type="text" placeholder="Camera" name="Camera" value="<%= data.gpu %>">
+    <input type="text" placeholder="Camera" name="Camera" value="<%= data.gpu %>" required>
   
     <label for="os"><b>Operating System</b></label>
-    <input type="text" placeholder="OS" name="os" value="<%= data.os %>">
+    <input type="text" placeholder="OS" name="os" value="<%= data.os %>" required>
   
     <label for="price"><b>Price</b></label>
-    <input type="text" placeholder="Price" name="price" value="<%= data.price %>">
+    <input type="text" placeholder="Price" name="price" value="<%= data.price %>" required>
   
     <label for="description"><b>Description</b></label>
-    <textarea placeholder="Description" name="description"><%= data.description %></textarea>
+    <textarea placeholder="Description" name="description" required><%= data.description %></textarea>
   
   <input type="submit" value="Update" class="btn">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const requiredFields = document.querySelectorAll('input[required], select[required]');
+      
+      requiredFields.forEach(field => {
+        const fieldName = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace('_', ' '); // Beautify field name
+        field.oninvalid = function(event) {
+          event.target.setCustomValidity(fieldName + ' is required.');
+        };
+        field.oninput = function(event) {
+          event.target.setCustomValidity('');
+        };
+      });
+    });
+    </script>
 
 </form>

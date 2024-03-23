@@ -5,30 +5,45 @@
 <form action="/add-lesson" method="POST">
 
   <label for="title"><b>Title</b></label>
-  <input type="text" placeholder="Vehicle Title" name="title">
+  <input type="text" placeholder="Title" name="title" required>
 
   <label for="tutor"><b>Type</b></label>
-  <input type="text" placeholder="Tutor" name="tutor">
+  <input type="text" placeholder="Tutor" name="tutor" required>
 
   <label for="lesson"><b>Lesson</b></label>
-  <input type="text" placeholder="Lesson " name="lesson">
+  <input type="text" placeholder="Lesson " name="lesson" required>
 
   <label for="location"><b>Location</b></label>
-  <input type="text" placeholder="Location " name="location">
+  <input type="text" placeholder="Location " name="location" required>
 
   <label for="duration"><b>Duration</b></label>
-  <input type="text" placeholder="Duration " name="duration">
+  <input type="text" placeholder="Duration " name="duration" required>
 
   <label for="price"><b>Price</b></label>
-  <input type="text" placeholder="Price " name="price">
+  <input type="text" placeholder="Price " name="price" required>
 
   <label for="image"><b>Image</b></label>
-  <input type="text" placeholder="URL " name="image">
+  <input type="text" placeholder="URL " name="image" required>
 
   <label for="description"><b>Description</b></label>
-  <input type="text" placeholder="Description " name="description">
+  <input type="text" placeholder="Description " name="description" required>
 
 
   <input type="submit" value="Add" class="btn">
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const requiredFields = document.querySelectorAll('input[required], select[required]');
+      
+      requiredFields.forEach(field => {
+        const fieldName = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace('_', ' '); // Beautify field name
+        field.oninvalid = function(event) {
+          event.target.setCustomValidity(fieldName + ' is required.');
+        };
+        field.oninput = function(event) {
+          event.target.setCustomValidity('');
+        };
+      });
+    });
+    </script>
+    
 </form>

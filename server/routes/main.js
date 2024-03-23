@@ -4,6 +4,7 @@ const vehicle = require('../models/vehicle')
 const phone = require('../models/phones')
 const computer = require('../models/computers')
 const lesson = require('../models/lessons')
+const User = require('../models/user');
 
 
 
@@ -78,18 +79,6 @@ router.get('/lessons', async (req,res) => {
 	}
 });
 
-router.post('/vehicleinfo/:id', async (req, res) => {
-	try {
-        const vehicleId = req.params.id;
-        const { isFavorite } = req.body; // Expecting a boolean value
-        const updatedVehicle = await vehicle.findByIdAndUpdate(vehicleId, { $set: { favorite: isFavorite } }, { new: true });
-
-        res.json({ status: 'success', message: 'Favorite status updated', data: updatedVehicle });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ status: 'error', message: 'Failed to update favorite status' });
-    }
-});
 //route for vehicleinfo
 router.get('/vehicleinfo/:id', async (req,res) => {
 	try{
@@ -99,8 +88,17 @@ router.get('/vehicleinfo/:id', async (req,res) => {
 		};
 		let slug = req.params.id;
 		const data = await vehicle.findById({_id: slug});
-		const fav = data.favorite ? "Like" : "Liked"
-		res.render('vehicles/vehicleinfo', {locals, data, fav});
+		const user = await User.findOne({username: req.session.userName});
+		if (user && user.favorite.includes(slug)) {
+			const fav = "Liked"
+			res.render('vehicles/vehicleinfo', {locals, data, fav});
+		} else {
+			const fav = "Not in favorite list"
+			res.render('vehicles/vehicleinfo', {locals, data, fav});
+		}
+		
+
+		
 	}catch(err){
 		console.log(err);
 	}
@@ -115,8 +113,15 @@ router.get('/phoneinfo/:id', async (req,res) => {
 			description: "An online marketplace application"
 		};
 		let slug = req.params.id;
-		const data = await phone.findById({_id: slug});
-		res.render('phones/phoneinfo', {locals, data});
+		const data = await vehicle.findById({_id: slug});
+		const user = await User.findOne({username: req.session.userName});
+		if (user && user.favorite.includes(slug)) {
+			const fav = "Liked"
+			res.render('phones/phoneinfo', {locals, data, fav});
+		} else {
+			const fav = "Not in favorite list"
+			res.render('phones/phoneinfo', {locals, data, fav});
+		}
 	}catch(err){
 		console.log(err);
 	}
@@ -130,8 +135,15 @@ router.get('/computerinfo/:id', async (req,res) => {
 			description: "An online marketplace application"
 		};
 		let slug = req.params.id;
-		const data = await computer.findById({_id: slug});
-		res.render('computers/computerinfo', {locals, data});
+		const data = await vehicle.findById({_id: slug});
+		const user = await User.findOne({username: req.session.userName});
+		if (user && user.favorite.includes(slug)) {
+			const fav = "Liked"
+			res.render('computers/computerinfo', {locals, data, fav});
+		} else {
+			const fav = "Not in favorite list"
+			res.render('computers/computerinfo', {locals, data, fav});
+		}
 	}catch(err){
 		console.log(err);
 	}
@@ -145,8 +157,15 @@ router.get('/lessoninfo/:id', async (req,res) => {
 			description: "An online marketplace application"
 		};
 		let slug = req.params.id;
-		const data = await lesson.findById({_id: slug});
-		res.render('lessons/lessoninfo', {locals, data});
+		const data = await vehicle.findById({_id: slug});
+		const user = await User.findOne({username: req.session.userName});
+		if (user && user.favorite.includes(slug)) {
+			const fav = "Liked"
+			res.render('lessons/lessoninfo', {locals, data, fav});
+		} else {
+			const fav = "Not in favorite list"
+			res.render('lessons/lessoninfo', {locals, data, fav});
+		}
 	}catch(err){
 		console.log(err);
 	}

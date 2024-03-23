@@ -6,54 +6,117 @@
 <form action="/edit-vehicleinfo/<%= data._id %>?_method=PUT" method="POST">
 
   <label for="title"><b>Title</b></label>
-  <input type="text" placeholder="Post Title" name="title" value="<%= data.title %>"> 
-
-  <label for="model"><b>Model</b></label>
-  <input type="text" placeholder="Model" name="model" value="<%= data.model %>"> 
+  <input type="text" placeholder="Vehicle Title" name="title" value="<%= data.title %>" required>
 
   <label for="type"><b>Type</b></label>
-  <input type="text" placeholder="Type" name="type" value="<%= data.type %>"> 
+  <select name="type" id="type" value="<%= data.type %>" required>
+    <option value="Sedan">Sedan</option>
+    <option value="Hatchback">Hatchback</option>
+    <option value="SUV">SUV</option>
+    <option value="Caravan">Caravan</option>
+    <option value="Truck">Truck</option>
+  </select>
 
   <label for="brand"><b>Brand</b></label>
-  <input type="text" placeholder="Brand" name="brand" value="<%= data.brand %>"> 
+  <input type="text" placeholder="Vehicle Brand" name="brand" value="<%= data.brand %>" required>
 
-  <label for="image"><b>Image URL</b></label>
-  <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>"> 
+  <label for="model"><b>Model</b></label>
+  <input type="text" placeholder="Vehicle Model" name="model" value="<%= data.model %>" required>
+
+  <label for="image"><b>Image</b></label>
+  <input type="text" placeholder="URL " name="image" value="<%= data.image %>" required>
 
   <label for="year"><b>Year</b></label>
-  <input type="text" placeholder="Year" name="year" value="<%= data.year %>"> 
+  <input type="text" placeholder="Year " name="year" value="<%= data.year %>" required>
 
   <label for="color"><b>Color</b></label>
-  <input type="text" placeholder="Color" name="color" value="<%= data.color %>"> 
+  <input type="text" placeholder="Color " name="color" value="<%= data.color %>" required>
 
-  <label for="engine_displacement"><b>Engine Displacement</b></label>
-  <input type="text" placeholder="Engine Displacement" name="engine_displacement" value="<%= data.engine_displacement %>"> 
+  <div id="engine_displacement" style="display: block;">
+    <label for="engine_displacement"><b>Engine Displacement</b></label>
+    <input type="text" placeholder="Engine Displacement " name="engine_displacement"  value="<%= data.engine_displacement %>">
+  </div>
+ 
 
   <label for="fuel_type"><b>Fuel Type</b></label>
-  <select name="fuel_type" value="<%= data.fuel_type %>">
+  <select name="fuel_type" id="fuelType"  value="<%= data.fuelType %>" required>
     <option value="Petrol">Petrol</option>
     <option value="Diesel">Diesel</option>
     <option value="Electric">Electric</option>
     <option value="Hybrid">Hybrid</option>
-    <!-- Add more options as necessary -->
+  </select>
+
+  <label for="drive_type"><b>Drive Type</b></label>
+  <select name="drive_type" value="<%= data.drive_type %>" required>
+    <option value="4WD">4WD</option>
+    <option value="AWD">AWD</option>
+    <option value="FWD">FWD</option>
+    <option value="RWD">RWD</option>
   </select>
 
   <label for="transmission_type"><b>Transmission Type</b></label>
-  <select name="transmission_type" value="<%= data.transmission_type %>">
+  <select name="transmission_type" value="<%= data.transmission_type %>" required >
     <option value="Manual">Manual</option>
     <option value="Automatic">Automatic</option>
-    <!-- Add more options as necessary -->
+    <option value="CVT">CVT</option>
   </select>
 
   <label for="mileage"><b>Mileage</b></label>
-  <input type="text" placeholder="Mileage" name="mileage" value="<%= data.mileage %>"> 
+  <input type="text" placeholder="Mileage " name="mileage" value="<%= data.mileage %>" required>
 
   <label for="price"><b>Price</b></label>
-  <input type="text" placeholder="Price" name="price" value="<%= data.price %>"> 
+  <input type="text" placeholder="Price " name="price" value="<%= data.price %>" required>
 
   <label for="description"><b>Description</b></label>
-  <textarea placeholder="Description" name="description"><%= data.description %></textarea>
+  <input type="text" placeholder="Description " name="description" value="<%= data.description %>" required>
 
+  <div id="electricCarFields" style="display: none;">
+    <label for="battery_capacity"><b>Battery Capacity</b></label>
+    <input type="text" placeholder="Battery Capacity in kWh" name="battery_capacity" value="<%= data.battery_capacity %>">
+  
+    <label for="range"><b>Range</b></label>
+    <input type="text" placeholder="Range in miles" name="range" value="<%= data.range %>">
+  </div>
+
+  <div id="caravanFields" style="display: none;">
+    <label for="bedCapacity"><b>Bed Capacity</b></label>
+    <input type="text" placeholder="Bed Capacity" name="bedCapacity" value="<%= data.bed_capacity %>">
+    <label for="watertank"><b>Water Tank Capacity</b></label>
+    <input type="text" placeholder="Water Tank Capacity in Litres" name="watertank" value="<%= data.water_tank %>">
+  </div>
+  <div id="truckFields" style="display: none;">
+    <label for="payloadCapacity"><b>Payload Capacity</b></label>
+    <input type="text" placeholder="Payload Capacity" name="payloadCapacity" value="<%= data.payload_capacity %>">
+  </div>
   <input type="submit" value="Update" class="btn">
+  <script>
 
+  document.getElementById('type').addEventListener('change', function() {
+    var style = this.value == 'Caravan' ? 'block' : 'none';
+    document.getElementById('caravanFields').style.display = style;
+    var style = this.value == 'Truck' ? 'block' : 'none';
+    document.getElementById('truckFields').style.display = style;
+  });
+  document.getElementById('fuelType').addEventListener('change', function() {
+    var style = this.value == 'Electric' ? 'block' : 'none';
+    var style2 = this.value == 'Electric' ? 'none' : 'block';
+    document.getElementById('electricCarFields').style.display = style;
+    document.getElementById('engine_displacement').style.display = style2;
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+      const requiredFields = document.querySelectorAll('input[required], select[required]');
+      
+      requiredFields.forEach(field => {
+        const fieldName = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace('_', ' '); // Beautify field name
+        field.oninvalid = function(event) {
+          event.target.setCustomValidity(fieldName + ' is required.');
+        };
+        field.oninput = function(event) {
+          event.target.setCustomValidity('');
+        };
+      });
+    });
+  </script>
 </form>
+
+

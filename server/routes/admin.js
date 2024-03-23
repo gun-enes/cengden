@@ -219,12 +219,21 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
 		const lessonsData = await lesson.find({ user: req.session.userName });
 		const computersData = await computer.find({ user: req.session.userName });
 		const data = phonesData.concat(vehiclesData, lessonsData, computersData);    
-
-    res.render('admin/dashboard', {
-      locals,
-      data,
-      layout: adminLayout
-    });
+    if(req.session.userName == 'admin'){
+      res.render('admin/admindashboard', {
+        locals,
+        data,
+        layout: adminLayout
+      });
+    }
+    else{
+      res.render('admin/dashboard', {
+        locals,
+        data,
+        layout: adminLayout
+      });
+    }
+    
 
   } catch (error) {
     console.log(error);
@@ -259,7 +268,13 @@ router.get('/admindashboard', authMiddleware, async (req, res) => {
 });
 router.delete('/delete-user/:id',authMiddleware ,async (req, res) => {
   try {
-    await User.deleteOne( { username: req.session.userName } );
+    const user = await User.findOne({_id: req.params.id});
+    const usernamefield = user.username;
+    await vehicle.deleteMany({ user: usernamefield });
+    await phone.deleteMany({ user: usernamefield });
+    await lesson.deleteMany({ user: usernamefield });
+    await computer.deleteMany({ user: usernamefield });
+    await User.deleteOne( { username: usernamefield } );
     res.redirect('/admindashboard/manageusers');
   } catch (error) {
     console.log(error);
@@ -439,23 +454,27 @@ router.put('/edit-vehicleinfo/:id', authMiddleware, async (req, res) => {
   try {
     await vehicle.findByIdAndUpdate(req.params.id, {
       active: true,
-        user: req.session.userName,
-        favorite: false,
-        product: "vehicleinfo",
-        title: req.body.title,
-        model: req.body.model,
-        type: req.body.type,
-        brand: req.body.brand,
-        image: req.body.image,
-        year: req.body.year,
-        color: req.body.color,
-        engine_displacement: req.body.engvehicleine_displacement,
-        fuel_type: req.body.fuel_type,
-        transmission_type: req.body.transmission_type,
-        mileage: req.body.mileage,
-        price: req.body.price,
-        description: req.body.description,
-
+      user: req.session.userName,
+      product: "vehicleinfo",
+      title: req.body.title,
+      model: req.body.model,
+      type: req.body.type,
+      brand: req.body.brand,
+      image: req.body.image,
+      year: req.body.year,
+      color: req.body.color,
+      engine_displacement: req.body.engine_displacement,
+      fuel_type: req.body.fuel_type,
+      transmission_type: req.body.transmission_type,
+      mileage: req.body.mileage,
+      price: req.body.price,
+      description: req.body.description,
+      battery_capacity: req.body.battery_capacity,
+      range: req.body.range,
+      bed_capacity:req.body.bedCapacity,
+      water_tank: req.body.watertank,
+      drive_type: req.body.drive_type,
+      payload_capacity: req.body.payloadCapacity,
     });
     const page = '/dashboard';
     res.redirect(page)
@@ -482,22 +501,21 @@ router.put('/edit-phoneinfo/:id', authMiddleware, async (req, res) => {
   try {
     await phone.findByIdAndUpdate(req.params.id, {
       active: true,
-      title: req.body.title,
-      product: "phoneinfo",
-      user: req.session.userName,
-      favorite: false,
-      model: req.body.model,
-      type: req.body.type,
-      brand: req.body.brand,
-      image: req.body.image,
-      year: req.body.year,
-      cpu: req.body.cpu,
-      ram: req.body.ram,
-      storage: req.body.storage,
-      camera: req.body.camera,
-      os: req.body.os,
-      price: req.body.price,
-      description: req.body.description,
+        title: req.body.title,
+        product: "phoneinfo",
+        user: req.session.userName,
+        model: req.body.model,
+        battery: req.body.battery,
+        brand: req.body.brand,
+        image: req.body.image,
+        year: req.body.year,
+        cpu: req.body.cpu,
+        ram: req.body.ram,
+        storage: req.body.storage,
+        camera: req.body.camera,
+        os: req.body.os,
+        price: req.body.price,
+        description: req.body.description,
 
     });
     const page = '/dashboard';
@@ -524,22 +542,21 @@ router.put('/edit-computerinfo/:id', authMiddleware, async (req, res) => {
   try {
     await computer.findByIdAndUpdate(req.params.id, {
       active: true,
-      title: req.body.title,
-      model: req.body.model,
-      user: req.session.userName,
-      favorite: false,
-      type: req.body.type,
-      product: "computerinfo",
-      brand: req.body.brand,
-      image: req.body.image,
-      year: req.body.year,
-      cpu: req.body.cpu,
-      ram: req.body.ram,
-      storage: req.body.storage,
-      gpu: req.body.gpu,
-      os: req.body.os,
-      price: req.body.price,
-      description: req.body.description,
+        title: req.body.title,
+        model: req.body.model,
+        user: req.session.userName,
+        type: req.body.type,
+        product: "computerinfo",
+        brand: req.body.brand,
+        image: req.body.image,
+        year: req.body.year,
+        cpu: req.body.cpu,
+        ram: req.body.ram,
+        storage: req.body.storage,
+        gpu: req.body.gpu,
+        os: req.body.os,
+        price: req.body.price,
+        description: req.body.description,
 
     });
     const page = '/dashboard';
@@ -571,7 +588,6 @@ router.put('/edit-lessoninfo/:id', authMiddleware, async (req, res) => {
         type: req.body.lesson,
         user: req.session.userName,
         product: "lessoninfo",
-        favorite: false,
         location: req.body.location,
         duration: req.body.duration,
         price: req.body.price,
@@ -603,7 +619,6 @@ router.put('/edit-lessoninfo/:id', authMiddleware, async (req, res) => {
 */
 router.get('/logout', (req, res) => {
   res.clearCookie('token');
-  //res.json({ message: 'Logout successful.'});
   res.redirect('/');
 });
 
@@ -716,7 +731,6 @@ router.post('/add-vehicle', authMiddleware, async (req, res) => {
       const newPost = new vehicle({
         active: true,
         user: req.session.userName,
-        favorite: false,
         product: "vehicleinfo",
         title: req.body.title,
         model: req.body.model,
@@ -731,6 +745,12 @@ router.post('/add-vehicle', authMiddleware, async (req, res) => {
         mileage: req.body.mileage,
         price: req.body.price,
         description: req.body.description,
+        battery_capacity: req.body.battery_capacity,
+        range: req.body.range,
+        bed_capacity:req.body.bedCapacity,
+        water_tank: req.body.watertank,
+        drive_type: req.body.drive_type,
+        payload_capacity: req.body.payloadCapacity,
       });
 
       await vehicle.create(newPost);
@@ -752,9 +772,8 @@ router.post('/add-phone', authMiddleware, async (req, res) => {
         title: req.body.title,
         product: "phoneinfo",
         user: req.session.userName,
-        favorite: false,
         model: req.body.model,
-        type: req.body.type,
+        battery: req.body.battery,
         brand: req.body.brand,
         image: req.body.image,
         year: req.body.year,
@@ -786,7 +805,6 @@ router.post('/add-computer', authMiddleware, async (req, res) => {
         title: req.body.title,
         model: req.body.model,
         user: req.session.userName,
-        favorite: false,
         type: req.body.type,
         product: "computerinfo",
         brand: req.body.brand,
@@ -822,7 +840,6 @@ router.post('/add-lesson', authMiddleware, async (req, res) => {
         type: req.body.lesson,
         user: req.session.userName,
         product: "lessoninfo",
-        favorite: false,
         location: req.body.location,
         duration: req.body.duration,
         price: req.body.price,
@@ -951,7 +968,6 @@ router.put('/favorite/:id', authMiddleware, async (req, res) => {
     let slug = req.params.id;
     const user = await User.findOne({username: req.session.userName});
     const data = await vehicle.findById({_id: slug});
-       // Check if the itemId is in the user's favorite list
        if(!user){
           return res.redirect('/login')
        }
@@ -964,7 +980,7 @@ router.put('/favorite/:id', authMiddleware, async (req, res) => {
         
     }
 
-    const page = '/';
+    const page = '/favorites';
     res.redirect(page)
   } catch (error) {
     console.log(error)
@@ -979,15 +995,12 @@ router.get('/favorites', authMiddleware, async (req, res) => {
       description: ''
     }
     const user = await User.findOne({username: req.session.userName});
-    const phonesData = await phone.find();
-    const vehiclesData = await vehicle.find();
-		const lessonsData = await lesson.find();
-		const computersData = await computer.find();
+		const phonesData = await phone.find({active: {$ne: false}});
+		const vehiclesData = await vehicle.find({active: {$ne: false}});
+		const lessonsData = await lesson.find({active: {$ne: false}});
+		const computersData = await computer.find({active: {$ne: false}});
 		const data = phonesData.concat(vehiclesData, lessonsData, computersData);
-    console.log(data);
-    console.log(user.favorite)
     const combinedData = data.filter(object => user.favorite.includes(object.id));
-    console.log(combinedData)
     res.render('admin/favorites', {
       locals,
       combinedData,

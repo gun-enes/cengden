@@ -5,44 +5,58 @@
 <form action="/add-computer" method="POST">
 
   <label for="title"><b>Title</b></label>
-  <input type="text" placeholder="Title" name="title">
+  <input type="text" placeholder="Title" name="title" required>
 
   <label for="type"><b>Type</b></label>
-  <input type="text" placeholder="Type" name="type">
+  <input type="text" placeholder="Type" name="type" required>
 
   <label for="model"><b>Model</b></label>
-  <input type="text" placeholder="Model" name="model">
+  <input type="text" placeholder="Model" name="model" required>
 
   <label for="brand"><b>Brand</b></label>
-  <input type="text" placeholder="Brand" name="brand">
+  <input type="text" placeholder="Brand" name="brand" required>
 
   <label for="image"><b>Image</b></label>
-  <input type="text" placeholder="URL " name="image">
+  <input type="text" placeholder="URL " name="image" required>
 
   <label for="year"><b>Year</b></label>
-  <input type="text" placeholder="Year " name="year">
+  <input type="text" placeholder="Year " name="year" required>
 
   <label for="cpu"><b>CPU</b></label>
-  <input type="text" placeholder="CPU " name="cpu">
+  <input type="text" placeholder="CPU " name="cpu" required>
 
   <label for="ram"><b>Ram</b></label>
-  <input type="text" placeholder="Ram " name="ram">
+  <input type="text" placeholder="Ram " name="ram" required>
 
   <label for="storage"><b>Storage</b></label>
-  <input type="text" placeholder="Storage " name="storage">
+  <input type="text" placeholder="Storage " name="storage" required>
 
   <label for="os"><b>Operating System</b></label>
-  <input type="text" placeholder="Operating System " name="os">
+  <input type="text" placeholder="Operating System " name="os" required>
 
   <label for="gpu"><b>GPU</b></label>
-  <input type="text" placeholder="GPU " name="gpu">
+  <input type="text" placeholder="GPU " name="gpu" required>
 
   <label for="price"><b>Price</b></label>
-  <input type="text" placeholder="Price " name="price">
+  <input type="text" placeholder="Price " name="price" required>
 
   <label for="description"><b>Description</b></label>
-  <input type="text" placeholder="Description " name="description">
+  <input type="text" placeholder="Description " name="description" required>
 
   <input type="submit" value="Add" class="btn">
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const requiredFields = document.querySelectorAll('input[required], select[required]');
+      
+      requiredFields.forEach(field => {
+        const fieldName = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace('_', ' '); // Beautify field name
+        field.oninvalid = function(event) {
+          event.target.setCustomValidity(fieldName + ' is required.');
+        };
+        field.oninput = function(event) {
+          event.target.setCustomValidity('');
+        };
+      });
+    });
+    </script>
 </form>

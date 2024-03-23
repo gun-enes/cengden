@@ -10,10 +10,6 @@ const phoneSchema = new Schema({
         type: Boolean,
         required: true,
     },
-    favorite: {
-        type: Boolean,
-        required: true,
-    },
     product: {
         type: String,
         required: true,
@@ -22,11 +18,11 @@ const phoneSchema = new Schema({
         type: String,
         required: true
     },
-    type: {
+    brand: {
         type: String,
         required: true
     },
-    brand: {
+    battery: {
         type: String,
         required: true
     },

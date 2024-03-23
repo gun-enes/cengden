@@ -5,44 +5,116 @@
 <form action="/add-vehicle" method="POST">
 
   <label for="title"><b>Title</b></label>
-  <input type="text" placeholder="Vehicle Title" name="title">
+  <input type="text" placeholder="Vehicle Title" name="title" required>
 
   <label for="type"><b>Type</b></label>
-  <input type="text" placeholder="Vehicle Type" name="type">
-
-  <label for="model"><b>Model</b></label>
-  <input type="text" placeholder="Vehicle Model" name="model">
+  <select name="type" id="type">
+    <option value="Sedan">Sedan</option>
+    <option value="Hatchback">Hatchback</option>
+    <option value="SUV">SUV</option>
+    <option value="Caravan">Caravan</option>
+    <option value="Truck">Truck</option>
+  </select>
 
   <label for="brand"><b>Brand</b></label>
-  <input type="text" placeholder="Vehicle Brand" name="brand">
+  <input type="text" placeholder="Vehicle Brand" name="brand" required>
+
+  <label for="model"><b>Model</b></label>
+  <input type="text" placeholder="Vehicle Model" name="model" required>
 
   <label for="image"><b>Image</b></label>
-  <input type="text" placeholder="URL " name="image">
+  <input type="text" placeholder="URL " name="image" required>
 
   <label for="year"><b>Year</b></label>
-  <input type="text" placeholder="Year " name="year">
+  <input type="text" placeholder="Year " name="year" required>
 
   <label for="color"><b>Color</b></label>
-  <input type="text" placeholder="Color " name="color">
-
-  <label for="engine_displacement"><b>Engine Displacement</b></label>
-  <input type="text" placeholder="Engine Displacement " name="engine_displacement">
+  <input type="text" placeholder="Color " name="color" required>
+  <div id="engine_displacement" style="display: block;">
+    <label for="engine_displacement"><b>Engine Displacement</b></label>
+    <input type="text" placeholder="Engine Displacement " name="engine_displacement" >
+  </div>
+ 
 
   <label for="fuel_type"><b>Fuel Type</b></label>
-  <input type="text" placeholder="Fuel Type " name="fuel_type">
+  <select name="fuel_type" id="fuelType" required>
+    <option value="Petrol">Petrol</option>
+    <option value="Diesel">Diesel</option>
+    <option value="Electric">Electric</option>
+    <option value="Hybrid">Hybrid</option>
+  </select>
+
+  <label for="drive_type"><b>Drive Type</b></label>
+  <select name="drive_type" required>
+    <option value="4WD">4WD</option>
+    <option value="AWD">AWD</option>
+    <option value="FWD">FWD</option>
+    <option value="RWD">RWD</option>
+  </select>
 
   <label for="transmission_type"><b>Transmission Type</b></label>
-  <input type="text" placeholder="Transmission Type " name="transmission_type">
+  <select name="transmission_type"  required>
+    <option value="Manual">Manual</option>
+    <option value="Automatic">Automatic</option>
+    <option value="CVT">CVT</option>
+  </select>
 
   <label for="mileage"><b>Mileage</b></label>
-  <input type="text" placeholder="Mileage " name="mileage">
+  <input type="text" placeholder="Mileage " name="mileage" required>
 
   <label for="price"><b>Price</b></label>
-  <input type="text" placeholder="Price " name="price">
+  <input type="text" placeholder="Price " name="price" required>
 
   <label for="description"><b>Description</b></label>
-  <input type="text" placeholder="Description " name="description">
+  <input type="text" placeholder="Description " name="description" required>
 
+  <div id="electricCarFields" style="display: none;">
+    <label for="battery_capacity"><b>Battery Capacity</b></label>
+    <input type="text" placeholder="Battery Capacity in kWh" name="battery_capacity">
+  
+    <label for="range"><b>Range</b></label>
+    <input type="text" placeholder="Range in miles" name="range">
+  </div>
+
+  <div id="caravanFields" style="display: none;">
+    <label for="bedCapacity"><b>Bed Capacity</b></label>
+    <input type="text" placeholder="Bed Capacity" name="bedCapacity">
+    <label for="watertank"><b>Water Tank Capacity</b></label>
+    <input type="text" placeholder="Water Tank Capacity in Litres" name="watertank">
+  </div>
+  <div id="truckFields" style="display: none;">
+    <label for="payloadCapacity"><b>Payload Capacity</b></label>
+    <input type="text" placeholder="Payload Capacity" name="payloadCapacity">
+  </div>
   <input type="submit" value="Add" class="btn">
+  <script>
 
+  document.getElementById('type').addEventListener('change', function() {
+    var style = this.value == 'Caravan' ? 'block' : 'none';
+    document.getElementById('caravanFields').style.display = style;
+    var style = this.value == 'Truck' ? 'block' : 'none';
+    document.getElementById('truckFields').style.display = style;
+  });
+  document.getElementById('fuelType').addEventListener('change', function() {
+    var style = this.value == 'Electric' ? 'block' : 'none';
+    var style2 = this.value == 'Electric' ? 'none' : 'block';
+    document.getElementById('electricCarFields').style.display = style;
+    document.getElementById('engine_displacement').style.display = style2;
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+      const requiredFields = document.querySelectorAll('input[required], select[required]');
+      
+      requiredFields.forEach(field => {
+        const fieldName = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace('_', ' '); // Beautify field name
+        field.oninvalid = function(event) {
+          event.target.setCustomValidity(fieldName + ' is required.');
+        };
+        field.oninput = function(event) {
+          event.target.setCustomValidity('');
+        };
+      });
+    });
+  </script>
 </form>
+
+
