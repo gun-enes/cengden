@@ -184,25 +184,48 @@ router.post('/search', async (req,res) => {
 		const vehicledata = await vehicle.find({
 			$or: [
 				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
-				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{brand: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{model: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{color: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{year: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{fuel_type: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{transmission_type: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{description: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
 			]
 		})
 		const phonedata = await phone.find({
 			$or: [
 				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
-				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{brand: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{model: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{cpu: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{ram: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{os: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{camera: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{description: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
 			]
 		})
 		const lessondata = await lesson.find({
 			$or: [
 				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
-				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{tutor: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{location: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{description: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
 			]
 		})
 		const data = await computer.find({
 			$or: [
 				{title: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
-				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}}
+				{type: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{brand: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{model: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{cpu: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{ram: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{os: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
+				{description: {$regex: new RegExp(searchNoSpecialChars, 'i')}},
 			]
 		})
 		const combinedData = data.concat(vehicledata, lessondata, phonedata);

@@ -8,14 +8,14 @@
   <label for="title"><b>Title</b></label>
   <input type="text" placeholder="Vehicle Title" name="title" value="<%= data.title %>" required>
 
-  <label for="type"><b>Type</b></label>
-  <select name="type" id="type" value="<%= data.type %>" required>
-    <option value="Sedan">Sedan</option>
-    <option value="Hatchback">Hatchback</option>
-    <option value="SUV">SUV</option>
-    <option value="Caravan">Caravan</option>
-    <option value="Truck">Truck</option>
-  </select>
+<label for="type"><b>Type</b></label>
+<select name="type" id="type" required>
+  <option value="Sedan" <% if(data.type === 'Sedan') { %>selected<% } %>>Sedan</option>
+  <option value="Hatchback" <% if(data.type === 'Hatchback') { %>selected<% } %>>Hatchback</option>
+  <option value="SUV" <% if(data.type === 'SUV') { %>selected<% } %>>SUV</option>
+  <option value="Caravan" <% if(data.type === 'Caravan') { %>selected<% } %>>Caravan</option>
+  <option value="Truck" <% if(data.type === 'Truck') { %>selected<% } %>>Truck</option>
+</select>
 
   <label for="brand"><b>Brand</b></label>
   <input type="text" placeholder="Vehicle Brand" name="brand" value="<%= data.brand %>" required>
@@ -39,26 +39,26 @@
  
 
   <label for="fuel_type"><b>Fuel Type</b></label>
-  <select name="fuel_type" id="fuelType"  value="<%= data.fuelType %>" required>
-    <option value="Petrol">Petrol</option>
-    <option value="Diesel">Diesel</option>
-    <option value="Electric">Electric</option>
-    <option value="Hybrid">Hybrid</option>
+  <select name="fuel_type" id="fuelType" required>
+    <option value="Petrol" <% if(data.fuel_type === 'Petrol') { %>selected<% } %>>Petrol</option>
+    <option value="Diesel" <% if(data.fuel_type === 'Diesel') { %>selected<% } %>>Diesel</option>
+    <option value="Electric" <% if(data.fuel_type === 'Electric') { %>selected<% } %>>Electric</option>
+    <option value="Hybrid" <% if(data.fuel_type === 'Hybrid') { %>selected<% } %>>Hybrid</option>
   </select>
-
+  
   <label for="drive_type"><b>Drive Type</b></label>
-  <select name="drive_type" value="<%= data.drive_type %>" required>
-    <option value="4WD">4WD</option>
-    <option value="AWD">AWD</option>
-    <option value="FWD">FWD</option>
-    <option value="RWD">RWD</option>
+  <select name="drive_type" id="driveType" required>
+    <option value="4WD" <% if(data.drive_type === '4WD') { %>selected<% } %>>4WD</option>
+    <option value="AWD" <% if(data.drive_type === 'AWD') { %>selected<% } %>>AWD</option>
+    <option value="FWD" <% if(data.drive_type === 'FWD') { %>selected<% } %>>FWD</option>
+    <option value="RWD" <% if(data.drive_type === 'RWD') { %>selected<% } %>>RWD</option>
   </select>
 
   <label for="transmission_type"><b>Transmission Type</b></label>
-  <select name="transmission_type" value="<%= data.transmission_type %>" required >
-    <option value="Manual">Manual</option>
-    <option value="Automatic">Automatic</option>
-    <option value="CVT">CVT</option>
+  <select name="transmission_type" id="transmissionType" required>
+    <option value="Manual" <% if(data.transmission_type === 'Manual') { %>selected<% } %>>Manual</option>
+    <option value="Automatic" <% if(data.transmission_type === 'Automatic') { %>selected<% } %>>Automatic</option>
+    <option value="CVT" <% if(data.transmission_type === 'CVT') { %>selected<% } %>>CVT</option>
   </select>
 
   <label for="mileage"><b>Mileage</b></label>

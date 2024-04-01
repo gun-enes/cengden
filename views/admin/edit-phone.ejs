@@ -18,7 +18,7 @@
     <input type="text" placeholder="Image URL" name="image" value="<%= data.image %>" required>
   
     <label for="year"><b>Year</b></label>
-    <input type="number" placeholder="Year" name="year" value="<%= data.year %>" required>
+    <input type="text" placeholder="Year" name="year" value="<%= data.year %>" required>
   
     <label for="cpu"><b>CPU</b></label>
     <input type="text" placeholder="CPU" name="cpu" value="<%= data.cpu %>" required>
@@ -28,16 +28,20 @@
   
     <label for="storage"><b>Storage</b></label>
     <input type="text" placeholder="Storage" name="storage" value="<%= data.storage %>" required>
-  
-    <label for="gpu"><b>GPU</b></label>
-    <input type="text" placeholder="GPU" name="gpu" value="<%= data.gpu %>" required>
-  
+
     <label for="os"><b>Operating System</b></label>
     <input type="text" placeholder="OS" name="os" value="<%= data.os %>" required>
-  
+      
+    <label for="camera"><b>Camera</b></label>
+    <input type="text" placeholder="Camera" name="camera" value="<%= data.camera %>" required>
+    
+    <label for="battery"><b>Battery</b></label>
+    <input type="text" placeholder="battery " name="battery" value="<%= data.battery %>" required>
+
     <label for="price"><b>Price</b></label>
     <input type="text" placeholder="Price" name="price" value="<%= data.price %>" required>
-  
+    
+
     <label for="description"><b>Description</b></label>
     <textarea placeholder="Description" name="description" required><%= data.description %></textarea>
   

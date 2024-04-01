@@ -9,73 +9,106 @@
     <span class="explanation">Favorite Status:</span>
     <span class="info"><%= fav %></span>
 </div>
+<% if (data.type) { %>
     <div class="info-row">
         <span class="explanation">Type:</span>
         <span class="info"><%= data.type %></span>
     </div>
+<% } %>
+<% if (data.brand) { %>
     <div class="info-row">
         <span class="explanation">Brand:</span>
         <span class="info"><%= data.brand %></span>
     </div>
+<% } %>
+<% if (data.model) { %>
     <div class="info-row">
         <span class="explanation">Model:</span>
         <span class="info"><%= data.model %></span>
     </div>
+<% } %>
+<% if (data.year) { %>
     <div class="info-row">
         <span class="explanation">Year:</span>
         <span class="info"><%= data.year %></span>
     </div>
+<% } %>
+<% if (data.color) { %>
     <div class="info-row">
         <span class="explanation">Color:</span>
         <span class="info"><%= data.color %></span>
     </div>
+<% } %>
+<% if (data.engine_displacement) { %>
     <div class="info-row">
         <span class="explanation">Engine Displacement:</span>
         <span class="info"><%= data.engine_displacement %></span>
     </div>
+<% } %>
+<% if (data.fuel_type) { %>
     <div class="info-row">
         <span class="explanation">Fuel Type:</span>
         <span class="info"><%= data.fuel_type %></span>
     </div>
+<% } %>
+<% if (data.transmission_type) { %>
     <div class="info-row">
         <span class="explanation">Transmission Type:</span>
         <span class="info"><%= data.transmission_type %></span>
     </div>
+<% } %>
+<% if (data.mileage) { %>
     <div class="info-row">
         <span class="explanation">Mileage:</span>
         <span class="info"><%= data.mileage %></span>
     </div>
+<% } %>
+<% if (data.description) { %>
     <div class="info-row">
         <span class="explanation">Description:</span>
         <span class="info"><%= data.description %></span>
     </div>
+<% } %>
+<% if (data.price) { %>
     <div class="info-row">
         <span class="explanation">Price:</span>
         <span class="info"><%= data.price %></span>
     </div>
+<% } %>
+<% if (data.drive_type) { %>
     <div class="info-row">
         <span class="explanation">Drive Type:</span>
         <span class="info"><%= data.drive_type %></span>
     </div>
+<% } %>
+<% if (data.battery_capacity) { %>
     <div class="info-row">
         <span class="explanation">Battery Capacity:</span>
         <span class="info"><%= data.battery_capacity %></span>
     </div>
+<% } %>
+<% if (data.range) { %>
     <div class="info-row">
         <span class="explanation">Range:</span>
         <span class="info"><%= data.range %></span>
     </div>
+<% } %>
+<% if (data.bed_capacity) { %>
     <div class="info-row">
         <span class="explanation">Bed Capacity:</span>
         <span class="info"><%= data.bed_capacity %></span>
     </div>
+<% } %>
+<% if (data.water_tank) { %>
     <div class="info-row">
         <span class="explanation">Water Tank:</span>
         <span class="info"><%= data.water_tank %></span>
     </div>
-    <div class="info-row">
+<% } %>
+<% if (data.payload_capacity) { %>
+    <div class="info-row" id="payload">
         <span class="explanation">Payload Capacity:</span>
         <span class="info"><%= data.payload_capacity %></span>
     </div>
-
+<% } %>
     

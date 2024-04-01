@@ -487,7 +487,7 @@ router.put('/edit-vehicleinfo/:id', authMiddleware, async (req, res) => {
 router.get('/edit-phoneinfo/:id', authMiddleware, async (req, res) => {
   try {
     const data = await phone.findOne({_id: req.params.id});
-    res.render('admin/edit-vehicle' ,{
+    res.render('admin/edit-phoneinfo' ,{
       data,
       layout: adminLayout
     })
